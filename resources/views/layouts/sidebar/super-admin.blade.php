@@ -17,6 +17,9 @@
       </a>
       <ul class="sub-menu">
         <li>
+          <a href="element-card.html" class="link"><span>Super Admin</span></a>
+        </li>
+        <li>
           <a href="element-ui.html" class="link"><span>Admin Sekolah</span></a>
         </li>
         <li>
@@ -30,9 +33,12 @@
     <li>
       <a href="#" class="main-menu has-dropdown">
         <i class="fa-solid fa-school"></i>
-        <span>Course & Modul</span>
+        <span>Sekolah & Modul</span>
       </a>
       <ul class="sub-menu">
+        <li>
+          <a href="form-element.html" class="link"> <span>Mitra Sekolah</span></a>
+        </li>
         <li>
           <a href="form-element.html" class="link"> <span>Kelas</span></a>
         </li>

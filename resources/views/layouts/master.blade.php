@@ -8,9 +8,9 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>{{ config('app.name', 'Laravel') }}</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
-    integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
-    crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('vendor/themify-icons/themify-icons.css') }}" />
@@ -73,7 +73,7 @@
             <a href="#" class="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <div class="label">
                 <span></span>
-                <div>Admin</div>
+                <div>{{ Auth::user()->name }}</div>
               </div>
               <img class="img-user" src="../assets/images/avatar1.png" alt="user" srcset="" />
             </a>
@@ -85,9 +85,14 @@
                 <a href="#">
                   <div class="description"><i class="ti-settings"></i> Setting</div>
                 </a>
-                <a href="#">
-                  <div class="description"><i class="ti-power-off"></i> Logout</div>
-                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+                  <a href="route('logout')"
+                    onclick="event.preventDefault();
+                    this.closest('form').submit();">
+                    <div class="description"><i class="ti-power-off"></i> Logout</div>
+                  </a>
+                </form>
               </li>
             </ul>
           </div>
@@ -101,7 +106,15 @@
           <i class="ti-close"></i>
         </div>
       </div>
-      @include('layouts.sidebar.admin')
+      @if (Auth::user()->role == 'super_admin')
+        @include('layouts.sidebar.super-admin')
+      @elseif(Auth::user()->role == 'admin')
+        @include('layouts.sidebar.admin')
+      @elseif(Auth::user()->role == 'guru')
+        @include('layouts.sidebar.guru')
+      @else
+        @include('layouts.sidebar.siswa')
+      @endif
     </nav>
     <main class="main-content">
       @yield('main')

@@ -17,9 +17,6 @@
       </a>
       <ul class="sub-menu">
         <li>
-          <a href="element-ui.html" class="link"><span>Admin Sekolah</span></a>
-        </li>
-        <li>
           <a href="element-accordion.html" class="link"><span>Guru</span></a>
         </li>
         <li>
