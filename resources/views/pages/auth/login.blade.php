@@ -26,8 +26,8 @@
               @endif
             </div>
             <div class="input-group input-group-join mb-3">
-              <input type="password" class="form-control" placeholder="Your password" name="password" required
-                autocomplete="current-password" />
+              <input type="password" id="password" class="form-control" placeholder="Your password"
+                name="password" required autocomplete="current-password" />
               <span class="input-group-text rounded-end password cursor-pointer">&nbsp<i
                   class="fa fa-eye"></i>&nbsp</span>
               <x-input-error :messages="$errors->get('password')" for="password" class="mt-2" />

@@ -11,16 +11,18 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('vendor/themify-icons/themify-icons.css') }}" />
   <link rel="stylesheet" href="{{ asset('vendor/perfect-scrollbar/css/perfect-scrollbar.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/css/style.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-override.min.css') }}" />
-  <link rel="stylesheet" id="theme-color" href="{{ asset('assets/css/dark.min.css') }}" />
 </head>
 
 <body>
+  @include('sweetalert::alert')
+  <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
   <div id="app">
     <div class="shadow-header"></div>
     <header class="header-navbar fixed">
@@ -129,6 +131,9 @@
     </footer>
     <div class="overlay action-toggle"></div>
   </div>
+  <script src="https://cdn.datatables.net/2.0.3/js/dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.min.js"></script>
+  <script src="{{ asset('vendor/jquery-validation/jquery.validate.min.js') }}"></script>
   <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.js') }}"></script>
   <script src="{{ asset('vendor/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
   <script src="{{ asset('assets/js/main.min.js') }}"></script>

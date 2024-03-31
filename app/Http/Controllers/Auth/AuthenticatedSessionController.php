@@ -7,7 +7,9 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -24,6 +26,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            Alert::toast('Email atau password salah!', 'error');
+            return redirect()->back()->withErrors($validator->errors())->withInput();
+        }
+
         $request->authenticate();
 
         $request->session()->regenerate();
@@ -38,7 +50,7 @@ class AuthenticatedSessionController extends Controller
         } else {
             $url = '/dashboard';
         }
-
+        Alert::toast('Selamat datang, ' . $request->user()->name . '!', 'success');
         return redirect()->intended($url);
     }
 
