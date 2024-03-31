@@ -18,5 +18,5 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/siswa/dashboard', function () {
         return view('pages.dashboard.siswa-dashboard');
-    })->name('siswa.dashboard');
+    })->name('dashboard.siswa');
 });

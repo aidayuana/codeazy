@@ -66,7 +66,7 @@
       </div>
       <div class="card-footer py-3 border-0">
         <div class="text-center">
-          Already have an account? <a href="{{ route('login') }}" class="text-dark">Login instead</a>
+          Already have an account? <a href="{{ route('login') }}" class="text-dark">Login Now</a>
         </div>
       </div>
     </div>

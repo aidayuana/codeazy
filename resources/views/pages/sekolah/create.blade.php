@@ -17,7 +17,6 @@
             <form method="POST" action="{{ route('sekolah.store') }}"
               class="form-horizontal d-flex flex-column gap-3">
               @csrf
-              <input type="hidden" name="sekolah_id" id="sekolah_id">
               <div class="form-group">
                 <label for="nama" class="mb-1 control-label">Nama Sekolah</label>
                 <div class="col-sm-12">
@@ -42,7 +41,7 @@
               </div>
 
               <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary col-1" id="saveBtn" value="create">
+                <button type="submit" class="btn btn-primary">
                   Submit
                 </button>
               </div>

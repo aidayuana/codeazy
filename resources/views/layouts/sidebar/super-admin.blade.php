@@ -1,7 +1,7 @@
 <div class="sidebar-content">
   <ul>
-    <li class="{{ request()->routeIs('super-admin.dashboard') ? 'active' : '' }}">
-      <a href="{{ route('super-admin.dashboard') }}" class="link">
+    <li class="{{ request()->routeIs('dashboard.super-admin') ? 'active' : '' }}">
+      <a href="{{ route('dashboard.super-admin') }}" class="link">
         <i class="ti-home"></i>
         <span>Dashboard</span>
       </a>
@@ -10,7 +10,7 @@
     <li class="menu-category">
       <span class="text-uppercase">Management Data</span>
     </li>
-    <li class="{{ request()->routeIs('user*') ? 'active' : '' }}">
+    <li class="{{ request()->routeIs(['guru*', 'admin*', 'siswa*', 'super-admin*']) ? 'active' : '' }}">
       <a href="#" class="main-menu has-dropdown">
         <i class="fa-solid fa-users"></i>
         <span>User</span>
@@ -23,7 +23,7 @@
           <a href="element-ui.html" class="link"><span>Admin Sekolah</span></a>
         </li>
         <li>
-          <a href="element-accordion.html" class="link"><span>Guru</span></a>
+          <a href="{{ route('guru.index') }}" class="link"><span>Guru</span></a>
         </li>
         <li>
           <a href="element-tabs-collapse.html" class="link"><span>Siswa</span></a>

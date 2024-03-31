@@ -16,4 +16,9 @@ class Sekolah extends Model
         'npsn',
         'alamat',
     ];
+
+    public function guru()
+    {
+        return $this->hasMany(Guru::class, 'id_sekolah', 'id');
+    }
 }

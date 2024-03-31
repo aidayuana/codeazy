@@ -17,5 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'role:guru'])->group(function () {
     Route::get('/guru/dashboard', function () {
         return view('pages.dashboard.guru-dashboard');
-    })->name('guru.dashboard');
+    })->name('dashboard.guru');
 });

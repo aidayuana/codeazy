@@ -77,19 +77,16 @@
                 <span></span>
                 <div>{{ Auth::user()->name }}</div>
               </div>
-              <img class="img-user" src="../assets/images/avatar1.png" alt="user" srcset="" />
+              <i class="ti-arrow-circle-down"></i>
             </a>
             <ul class="dropdown-menu small">
               <li class="menu-content ps-menu">
-                <a href="#">
+                <a href="{{ route('profile.edit') }}">
                   <div class="description"><i class="ti-user"></i> Profile</div>
-                </a>
-                <a href="#">
-                  <div class="description"><i class="ti-settings"></i> Setting</div>
                 </a>
                 <form method="POST" action="{{ route('logout') }}">
                   @csrf
-                  <a href="route('logout')"
+                  <a href="javascript:void(0)"
                     onclick="event.preventDefault();
                     this.closest('form').submit();">
                     <div class="description"><i class="ti-power-off"></i> Logout</div>
@@ -103,7 +100,7 @@
     </header>
     <nav class="main-sidebar ps-menu">
       <div class="sidebar-header">
-        <div class="text">CodeEasy</div>
+        <div class="text fs-2">CE</div>
         <div class="close-sidebar action-toggle">
           <i class="ti-close"></i>
         </div>
