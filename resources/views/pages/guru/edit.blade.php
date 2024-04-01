@@ -22,7 +22,7 @@
                 <label for="name" class="mb-1 control-label">Nama Guru</label>
                 <div class="col-sm-12">
                   <input type="text" class="form-control" id="name" name="name"
-                    placeholder="Nama Guru" value="{{ old('name', $guru->user->name) }}" required />
+                    placeholder="Nama Guru" value="{{ old('name', $guru->name) }}" required />
                 </div>
               </div>
 
@@ -30,7 +30,7 @@
                 <label for="nip" class="mb-1 control-label">NIP</label>
                 <div class="col-sm-12">
                   <input type="text" class="form-control" id="nip" name="nip" placeholder="NIP"
-                    value="{{ old('nip', $guru->nip) }}" required />
+                    value="{{ old('nip', $guru->guru->nip) }}" required />
                 </div>
               </div>
 
@@ -38,7 +38,7 @@
                 <label for="email" class="mb-1 control-label">Email</label>
                 <div class="col-sm-12">
                   <input type="email" class="form-control" id="email" name="email" placeholder="Email"
-                    value="{{ old('email', $guru->user->email) }}" required />
+                    value="{{ old('email', $guru->email) }}" required />
                 </div>
               </div>
 
@@ -65,7 +65,7 @@
                     <option value="">Pilih Asal Sekolah</option>
                     @foreach ($dataSekolah as $item)
                       <option value="{{ $item->id }}"
-                        {{ old('id_sekolah', $guru->id_sekolah) == $item->id ? 'selected' : '' }}>
+                        {{ old('id_sekolah', $guru->guru->id_sekolah) == $item->id ? 'selected' : '' }}>
                         {{ $item->nama }}
                       </option>
                     @endforeach
@@ -78,15 +78,15 @@
                 <label for="mata_pelajaran" class="mb-1 control-label">Mata Pelajaran</label>
                 <div class="col-sm-12">
                   <input type="text" class="form-control" id="mata_pelajaran" name="mata_pelajaran"
-                    placeholder="Mata Pelajaran" value="{{ old('mata_pelajaran', $guru->mata_pelajaran) }}"
-                    required />
+                    placeholder="Mata Pelajaran"
+                    value="{{ old('mata_pelajaran', $guru->guru->mata_pelajaran) }}" required />
                 </div>
               </div>
 
               <div class="form-group">
                 <label for="alamat" class="mb-1 control-label">Alamat</label>
                 <div class="col-sm-12">
-                  <textarea class="form-control" id="alamat" name="alamat" placeholder="Alamat" required>{{ old('alamat', $guru->alamat) }}</textarea>
+                  <textarea class="form-control" id="alamat" name="alamat" placeholder="Alamat" required>{{ old('alamat', $guru->guru->alamat) }}</textarea>
                 </div>
               </div>
 

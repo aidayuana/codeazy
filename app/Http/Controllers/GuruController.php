@@ -100,21 +100,26 @@ class GuruController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Guru $guru)
+    public function edit(User $guru)
     {
         $dataSekolah = Sekolah::with('guru')->get();
+        $guru->load('guru');
         return view('pages.guru.edit', compact('guru', 'dataSekolah'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Guru $guru)
+    public function update(Request $request, User $guru)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required',
-            'nip' => 'required|unique:guru,nip,' . $guru->id,
-            'sekolah_id' => 'required',
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
+            'alamat' => 'required',
+            'mata_pelajaran' => 'required',
+            'nip' => 'required',
+            'id_sekolah' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -123,7 +128,17 @@ class GuruController extends Controller
         }
 
         try {
-            $guru->update($request->all());
+            $guru->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'guru' => [
+                    'nip' => $request->nip,
+                    'alamat' => $request->alamat,
+                    'mata_pelajaran' => $request->mata_pelajaran,
+                    'id_sekolah' => $request->id_sekolah,
+                ]
+            ]);
             Alert::toast('Data guru berhasil diubah!', 'success');
             return redirect()->route('guru.index');
         } catch (\Exception $e) {
