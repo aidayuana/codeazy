@@ -35,9 +35,11 @@
               <label class="text-muted" for="password">Password</label>
             </div>
             <div class="input-group input-group-join mb-3">
-              <input type="password" class="form-control" placeholder="Your password" required>
-              <span class="input-group-text rounded-end password cursor-pointer">&nbsp<i
-                  class="fa fa-eye"></i>&nbsp</span>
+              <input type="password" class="form-control" id="password" placeholder="Your password"
+                name="password" required>
+              <span class="input-group-text rounded-end password cursor-pointer">
+                &nbsp<i id="eye-1" class="fa fa-eye"></i>&nbsp
+              </span>
               <div class="invalid-feedback">
                 Password is required
               </div>
@@ -48,9 +50,12 @@
               <label class="text-muted" for="password">Confirm Password</label>
             </div>
             <div class="input-group input-group-join mb-3">
-              <input type="password" class="form-control" placeholder="Confirm Your Password" required>
-              <span class="input-group-text rounded-end password cursor-pointer">&nbsp<i
-                  class="fa fa-eye"></i>&nbsp</span>
+              <input type="password" class="form-control" id="password_confirmation"
+                placeholder="Confirm Your Password" name="password_confirmation" required>
+              <span class="input-group-text rounded-end password cursor-pointer">
+                &nbsp
+                <i id="eye-2" class="fa fa-eye"></i>&nbsp
+              </span>
               <div class="invalid-feedback">
                 Confirm Password is required
               </div>
@@ -74,4 +79,28 @@
       Copyright &copy; 2022 &mdash; Mulai Dari Null
     </div>
   </div>
+  <script>
+    $(document).ready(function() {
+      const password = $('#password');
+      const passwordConfirmation = $('#password_confirmation');
+      $('#eye-1').click(function() {
+        if (password.attr('type') === 'password') {
+          password.attr('type', 'text');
+          $('#eye-1').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+          password.attr('type', 'password');
+          $('#eye-1').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+      });
+      $('#eye-2').click(function() {
+        if (passwordConfirmation.attr('type') === 'password') {
+          passwordConfirmation.attr('type', 'text');
+          $('#eye-2').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+          passwordConfirmation.attr('type', 'password');
+          $('#eye-2').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+      });
+    });
+  </script>
 @endsection

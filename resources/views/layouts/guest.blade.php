@@ -19,12 +19,13 @@
 </head>
 
 <body>
+  @include('sweetalert::alert')
+  <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
   <main class="container h-100">
     <section class="row justify-content-sm-center h-100 align-items-center">
       @yield('content')
     </section>
   </main>
-  @include('sweetalert::alert')
 </body>
 
 </html>

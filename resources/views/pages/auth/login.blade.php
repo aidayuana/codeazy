@@ -28,8 +28,9 @@
             <div class="input-group input-group-join mb-3">
               <input type="password" id="password" class="form-control" placeholder="Your password"
                 name="password" required autocomplete="current-password" />
-              <span class="input-group-text rounded-end password cursor-pointer">&nbsp<i
-                  class="fa fa-eye"></i>&nbsp</span>
+              <span class="input-group-text rounded-end password cursor-pointer">
+                &nbsp<i id="eye" class="fa fa-eye"></i>&nbsp
+              </span>
               <x-input-error :messages="$errors->get('password')" for="password" class="mt-2" />
             </div>
           </div>
@@ -54,4 +55,18 @@
       Copyright &copy; 2022 &mdash; Mulai Dari Null
     </div>
   </div>
+  <script>
+    $(document).ready(function() {
+      const password = $('#password');
+      $('#eye').click(function() {
+        if (password.attr('type') === 'password') {
+          password.attr('type', 'text');
+          $('#eye').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+          password.attr('type', 'password');
+          $('#eye').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+      });
+    });
+  </script>
 @endsection
