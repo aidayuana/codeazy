@@ -48,7 +48,7 @@ class AuthenticatedSessionController extends Controller
         } else if ($request->user()->role == 'guru') {
             $url = '/guru/dashboard';
         } else {
-            $url = '/dashboard';
+            $url = '/siswa/dashboard';
         }
         Alert::toast('Selamat datang, ' . $request->user()->name . '!', 'success');
         return redirect()->intended($url);
