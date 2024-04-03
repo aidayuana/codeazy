@@ -30,7 +30,7 @@
         </li>
       </ul>
     </li>
-    <li class="{{ request()->routeIs('sekolah*') ? 'active' : '' }}">
+    <li class="{{ request()->routeIs(['sekolah*', 'kelas*']) ? 'active' : '' }}">
       <a href="#" class="main-menu has-dropdown">
         <i class="fa-solid fa-school"></i>
         <span>Sekolah & Modul</span>
@@ -40,7 +40,7 @@
           <a href="{{ route('sekolah.index') }}" class="link"> <span>Mitra Sekolah</span></a>
         </li>
         <li>
-          <a href="form-element.html" class="link"> <span>Kelas</span></a>
+          <a href="{{ route('kelas.index') }}" class="link"> <span>Kelas</span></a>
         </li>
         <li>
           <a href="form-element.html" class="link"> <span>Course</span></a>

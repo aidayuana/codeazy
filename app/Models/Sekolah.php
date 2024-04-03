@@ -19,6 +19,11 @@ class Sekolah extends Model
 
     public function guru()
     {
-        return $this->hasMany(Guru::class, 'id_sekolah', 'id');
+        return $this->hasMany(Guru::class, 'sekolah_id', 'id');
+    }
+
+    public function kelas()
+    {
+        return $this->hasMany(Kelas::class, 'sekolah_id', 'id');
     }
 }

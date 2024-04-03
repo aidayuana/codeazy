@@ -51,7 +51,7 @@ class GuruController extends Controller
             'alamat' => 'required',
             'mata_pelajaran' => 'required',
             'nip' => 'required|unique:guru,nip',
-            'id_sekolah' => 'required',
+            'sekolah_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -69,8 +69,8 @@ class GuruController extends Controller
 
             if ($user) {
                 Guru::create([
-                    'id_user' => $user->id,
-                    'id_sekolah' => $request->id_sekolah,
+                    'user_id' => $user->id,
+                    'sekolah_id' => $request->sekolah_id,
                     'nip' => $request->nip,
                     'alamat' => $request->alamat,
                     'mata_pelajaran' => $request->mata_pelajaran,
@@ -119,7 +119,7 @@ class GuruController extends Controller
             'alamat' => 'required',
             'mata_pelajaran' => 'required',
             'nip' => 'required',
-            'id_sekolah' => 'required',
+            'sekolah_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -136,7 +136,7 @@ class GuruController extends Controller
                     'nip' => $request->nip,
                     'alamat' => $request->alamat,
                     'mata_pelajaran' => $request->mata_pelajaran,
-                    'id_sekolah' => $request->id_sekolah,
+                    'sekolah_id' => $request->sekolah_id,
                 ]
             ]);
             Alert::toast('Data guru berhasil diubah!', 'success');

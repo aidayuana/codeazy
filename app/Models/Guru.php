@@ -11,8 +11,8 @@ class Guru extends Model
 
     protected $table = 'guru';
     protected $fillable = [
-        'id_user',
-        'id_sekolah',
+        'user_id',
+        'sekolah_id',
         'nip',
         'alamat',
         'mata_pelajaran'
@@ -20,11 +20,11 @@ class Guru extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id_user', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function sekolah()
     {
-        return $this->belongsTo(Sekolah::class, 'id_sekolah', 'id');
+        return $this->belongsTo(Sekolah::class, 'sekolah_id', 'id');
     }
 }

@@ -1,14 +1,14 @@
 @extends('layouts.master')
 @section('main')
-  <div class="title">Data Sekolah</div>
+  <div class="title">Data Kelas</div>
   <div class="content-wrapper">
     <div class="row same-height">
       <div class="col-md-12">
         <div class="card">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <h4>List Data Sekolah</h4>
-            <a class="btn btn-success" href="{{ route('sekolah.create') }}">
-              Tambah Sekolah
+            <h4>List Data Kelas</h4>
+            <a class="btn btn-success" href="{{ route('kelas.create') }}">
+              Tambah Kelas
             </a>
           </div>
           <div class="card-body table-responsive">
@@ -16,9 +16,10 @@
               <thead>
                 <tr>
                   <th>No</th>
-                  <th>Nama Sekolah</th>
-                  <th>NPSN</th>
-                  <th>Alamat</th>
+                  <th>Nama Kelas</th>
+                  @if (Auth::user()->role == 'super_admin')
+                    <th>Asal Sekolah</th>
+                  @endif
                   <th width="280px">Action</th>
                 </tr>
               </thead>
@@ -38,24 +39,21 @@
       const table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('sekolah.index') }}",
+        ajax: "{{ route('kelas.index') }}",
         columns: [{
             data: 'DT_RowIndex',
             name: 'DT_RowIndex'
           },
           {
-            data: 'nama',
-            name: 'nama'
+            data: 'nama_kelas',
+            name: 'nama_kelas'
           },
-          {
-            data: 'npsn',
-            name: 'npsn'
-          },
-          {
-            data: 'alamat',
-            name: 'alamat'
-          },
-          {
+          @if (Auth::user()->role == 'super_admin')
+            {
+              data: 'sekolah.nama',
+              name: 'sekolah.nama'
+            },
+          @endif {
             data: 'action',
             name: 'action',
             orderable: false,

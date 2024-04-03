@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Sekolah;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -10,8 +11,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RegisteredUserController extends Controller
 {
@@ -20,7 +23,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('pages.auth.register');
+        $dataSekolah = Sekolah::all();
+        return view('pages.auth.register', compact('dataSekolah'));
     }
 
     /**
@@ -30,17 +34,59 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        if ($request->password != $request->password_confirmation) {
+            Alert::error('Error', 'Password confirmation does not match!');
+            return redirect()->back()->withInput();
+        }
+        if ($request->role == 'admin') {
+            $validator = Validator::make($request->all(), [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+                'sekolah_id' => ['required'],
+                'alamat' => ['required'],
+                'npsn' => ['required'],
+            ]);
+        } elseif ($request->role == 'guru') {
+            $validator = Validator::make($request->all(), [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+                'sekolah_id' => ['required'],
+            ]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+                'sekolah_id' => ['required'],
+            ]);
+        }
+
+        if ($validator->fails()) {
+            Alert::error('Error', $validator->errors()->first());
+            return redirect()->back()->withInput();
+        }
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        if ($request->role == 'guru') {
+            $user->guru()->create([
+                'sekolah_id' => $request->sekolah_id,
+            ]);
+        } elseif ($request->role == 'admin') {
+            $user->admin()->create([
+                'sekolah_id' => $request->sekolah_id,
+            ]);
+        } else {
+            $user->siswa()->create([
+                'sekolah_id' => $request->sekolah_id,
+            ]);
+        }
 
         event(new Registered($user));
 

@@ -8,14 +8,11 @@
         <form method="POST" action="{{ route('register') }}" class="needs-validation">
           @csrf
           <div class="mb-3">
-            <label class="mb-2 text-muted" for="email">Full Name</label>
+            <label class="mb-2 text-muted" for="name">Full Name</label>
             <div class="input-group input-group-join mb-3">
-              <input type="text" placeholder="Enter Your Name" class="form-control" name="fullName" required
-                autofocus>
+              <input type="text" placeholder="Enter Your Name" id="name" class="form-control"
+                name="name" required autofocus>
               <span class="input-group-text rounded-end">&nbsp<i class="fa fa-user"></i>&nbsp</span>
-              <div class="invalid-feedback">
-                Name is required
-              </div>
             </div>
           </div>
           <div class="mb-3">
@@ -24,9 +21,6 @@
               <input id="email" type="email" placeholder="Enter Email" class="form-control" name="email"
                 required autofocus>
               <span class="input-group-text rounded-end">&nbsp<i class="fa fa-envelope"></i>&nbsp</span>
-              <div class="invalid-feedback">
-                Email is invalid
-              </div>
             </div>
           </div>
 
@@ -40,9 +34,6 @@
               <span class="input-group-text rounded-end password cursor-pointer">
                 &nbsp<i id="eye-1" class="fa fa-eye"></i>&nbsp
               </span>
-              <div class="invalid-feedback">
-                Password is required
-              </div>
             </div>
           </div>
           <div class="mb-3">
@@ -56,8 +47,58 @@
                 &nbsp
                 <i id="eye-2" class="fa fa-eye"></i>&nbsp
               </span>
-              <div class="invalid-feedback">
-                Confirm Password is required
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="mb-2 text-muted" for="role">Role</label>
+            <div class="input-group input-group-join mb-3">
+              <select name="role" id="role" class="form-select" required>
+                <option value="">Select Role</option>
+                <option value="admin">Admin Sekolah</option>
+                <option value="guru">Guru</option>
+                <option value="siswa">Siswa</option>
+              </select>
+              <span class="input-group-text rounded-end">&nbsp<i class="fa fa-user"></i>&nbsp</span>
+            </div>
+          </div>
+
+          <div id="sekolah_input" class="mb-3 d-block">
+            <label class="mb-2 text-muted" for="sekolah_id">Asal Sekolah</label>
+            <div class="input-group input-group-join mb-3">
+              <select name="sekolah_id" id="sekolah_id" class="form-select">
+                <option value="">Pilih Asal Sekolah</option>
+                @foreach ($dataSekolah as $sekolah)
+                  <option value="{{ $sekolah->id }}">{{ $sekolah->nama }}</option>
+                @endforeach
+              </select>
+              <span class="input-group-text rounded-end">&nbsp<i class="fa fa-school"></i>&nbsp</span>
+            </div>
+          </div>
+
+          <div id="admin_form" class="d-flex flex-column gap-3 mb-3 d-none">
+            <div>
+              <label class="mb-2 text-muted" for="sekolah">Asal Sekolah</label>
+              <div class="input-group input-group-join">
+                <input type="text" placeholder="Masukkan Nama Sekolah" id="sekolah" class="form-control"
+                  name="sekolah" autofocus>
+                <span class="input-group-text rounded-end">&nbsp<i class="fa fa-school"></i>&nbsp</span>
+              </div>
+            </div>
+            <div>
+              <label class="mb-2 text-muted" for="alamat">Alamat</label>
+              <div class="input-group input-group-join">
+                <input type="text" placeholder="Masukkan Alamat" id="alamat" class="form-control"
+                  name="alamat" autofocus>
+                <span class="input-group-text rounded-end">&nbsp<i class="fa fa-school"></i></i>&nbsp</span>
+              </div>
+            </div>
+            <div>
+              <label class="mb-2 text-muted" for="npsn">NPSN</label>
+              <div class="input-group input-group-join">
+                <input type="text" placeholder="Masukkan NPSN" id="npsn" class="form-control"
+                  name="npsn" autofocus>
+                <span class="input-group-text rounded-end">&nbsp<i class="fa fa-id-card"></i>&nbsp</span>
               </div>
             </div>
           </div>
@@ -79,8 +120,10 @@
       Copyright &copy; 2022 &mdash; Mulai Dari Null
     </div>
   </div>
+
   <script>
     $(document).ready(function() {
+      // Show or hide password
       const password = $('#password');
       const passwordConfirmation = $('#password_confirmation');
       $('#eye-1').click(function() {
@@ -99,6 +142,28 @@
         } else {
           passwordConfirmation.attr('type', 'password');
           $('#eye-2').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+      });
+
+      const role = $('#role');
+      const adminForm = $('#admin_form');
+      const sekolahInput = $('#sekolah_input');
+      const sekolah = $('#sekolah');
+      const idSekolah = $('#sekolah_id');
+      const alamat = $('#alamat');
+      const npsn = $('#npsn');
+
+      role.change(function() {
+        if (role.val() === 'admin') {
+          adminForm.addClass('d-flex').removeClass('d-none');
+          sekolahInput.addClass('d-none').removeClass('d-block');
+          alamat.attr('required', true);
+          npsn.attr('required', true);
+          sekolah.attr('required', true);
+        } else {
+          adminForm.addClass('d-none').removeClass('d-flex');
+          sekolahInput.addClass('d-block').removeClass('d-none');
+          idSekolah.attr('required', true);
         }
       });
     });

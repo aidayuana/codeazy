@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GuruController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SekolahController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,16 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
         Route::get('/{sekolah}/edit', [SekolahController::class, 'edit'])->name('sekolah.edit');
         Route::patch('/{sekolah}', [SekolahController::class, 'update'])->name('sekolah.update');
         Route::delete('/{sekolah}', [SekolahController::class, 'destroy'])->name('sekolah.destroy');
+    });
+
+    Route::prefix('kelas')->group(function () {
+        Route::get('/', [KelasController::class, 'index'])->name('kelas.index');
+        Route::get('/create', [KelasController::class, 'create'])->name('kelas.create');
+        Route::post('/', [KelasController::class, 'store'])->name('kelas.store');
+        Route::get('/{kelas}', [KelasController::class, 'show'])->name('kelas.show');
+        Route::get('/{kelas}/edit', [KelasController::class, 'edit'])->name('kelas.edit');
+        Route::patch('/{kelas}', [KelasController::class, 'update'])->name('kelas.update');
+        Route::delete('/{kelas}', [KelasController::class, 'destroy'])->name('kelas.destroy');
     });
 
     Route::prefix('user/guru')->group(function () {

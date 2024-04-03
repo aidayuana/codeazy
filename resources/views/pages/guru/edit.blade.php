@@ -59,13 +59,13 @@
               </div>
 
               <div class="form-group">
-                <label for="id_sekolah" class="mb-1 control-label">Asal Sekolah</label>
+                <label for="sekolah_id" class="mb-1 control-label">Asal Sekolah</label>
                 <div class="col-sm-12">
-                  <select class="form-select" id="id_sekolah" name="id_sekolah" required>
+                  <select class="form-select" id="sekolah_id" name="sekolah_id" required>
                     <option value="">Pilih Asal Sekolah</option>
                     @foreach ($dataSekolah as $item)
                       <option value="{{ $item->id }}"
-                        {{ old('id_sekolah', $guru->guru->id_sekolah) == $item->id ? 'selected' : '' }}>
+                        {{ old('sekolah_id', $guru->guru->sekolah_id) == $item->id ? 'selected' : '' }}>
                         {{ $item->nama }}
                       </option>
                     @endforeach
