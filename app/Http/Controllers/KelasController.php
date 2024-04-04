@@ -110,4 +110,11 @@ class KelasController extends Controller
             return redirect()->back();
         }
     }
+
+    public function getKelas(Request $request)
+    {
+        $sekolahId = $request->input('sekolah_id');
+        $data = Kelas::where('sekolah_id', $sekolahId)->get();
+        return response()->json($data);
+    }
 }

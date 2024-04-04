@@ -90,6 +90,7 @@ class RegisteredUserController extends Controller
         } else {
             $user->siswa()->create([
                 'sekolah_id' => $request->sekolah_id,
+                'kelas_id' => $request->kelas_id,
             ]);
         }
 

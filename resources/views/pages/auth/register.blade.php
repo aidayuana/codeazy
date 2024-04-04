@@ -11,7 +11,7 @@
             <label class="mb-2 text-muted" for="name">Full Name</label>
             <div class="input-group input-group-join mb-3">
               <input type="text" placeholder="Enter Your Name" id="name" class="form-control"
-                name="name" required autofocus>
+                name="name" required autofocus autocomplete="name">
               <span class="input-group-text rounded-end">&nbsp<i class="fa fa-user"></i>&nbsp</span>
             </div>
           </div>
@@ -19,7 +19,7 @@
             <label class="mb-2 text-muted" for="email">E-Mail Address</label>
             <div class="input-group input-group-join mb-3">
               <input id="email" type="email" placeholder="Enter Email" class="form-control" name="email"
-                required autofocus>
+                required autofocus autocomplete="username">
               <span class="input-group-text rounded-end">&nbsp<i class="fa fa-envelope"></i>&nbsp</span>
             </div>
           </div>
@@ -71,6 +71,16 @@
                 @foreach ($dataSekolah as $sekolah)
                   <option value="{{ $sekolah->id }}">{{ $sekolah->nama }}</option>
                 @endforeach
+              </select>
+              <span class="input-group-text rounded-end">&nbsp<i class="fa fa-school"></i>&nbsp</span>
+            </div>
+          </div>
+
+          <div id="kelas_input" class="mb-3 d-none">
+            <label class="mb-2 text-muted" for="kelas_id">Kelas</label>
+            <div class="input-group input-group-join mb-3">
+              <select name="kelas_id" id="kelas_id" class="form-select">
+                <option value="">Pilih Kelas</option>
               </select>
               <span class="input-group-text rounded-end">&nbsp<i class="fa fa-school"></i>&nbsp</span>
             </div>
@@ -148,6 +158,8 @@
       const role = $('#role');
       const adminForm = $('#admin_form');
       const sekolahInput = $('#sekolah_input');
+      const kelasInput = $('#kelas_input');
+      const kelasId = $('#kelas_id');
       const sekolah = $('#sekolah');
       const idSekolah = $('#sekolah_id');
       const alamat = $('#alamat');
@@ -161,9 +173,41 @@
           npsn.attr('required', true);
           sekolah.attr('required', true);
         } else {
+          if (role.val() === 'siswa') {
+            kelasInput.addClass('d-block').removeClass('d-none');
+            kelasId.attr('required', true);
+          }
           adminForm.addClass('d-none').removeClass('d-flex');
           sekolahInput.addClass('d-block').removeClass('d-none');
           idSekolah.attr('required', true);
+        }
+      });
+
+      $('#sekolah_id').change(function() {
+        if (idSekolah.val() !== '') {
+          $.ajax({
+            url: `{{ route('kelas.getBySekolah') }}`,
+            type: 'POST',
+            data: {
+              _token: '{{ csrf_token() }}',
+              sekolah_id: idSekolah.val()
+            },
+            success: function(data) {
+              console.log(data);
+              if (data.length > 0) {
+                $.each(data, function(index, kelas) {
+                  kelasId.append('<option value="' + kelas.id + '">' + kelas.nama_kelas +
+                    '</option>');
+                });
+              } else {
+                // Handle the case where no kelas are found
+                kelasId.append('<option value="">Tidak ada data kelas</option>');
+              }
+            },
+            error: function(err) {
+              console.log(err);
+            }
+          });
         }
       });
     });
