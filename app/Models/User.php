@@ -48,4 +48,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Guru::class, 'user_id', 'id');
     }
+
+    public function admin()
+    {
+        return $this->hasOne(Admin::class, 'user_id', 'id');
+    }
 }

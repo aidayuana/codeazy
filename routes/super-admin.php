@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SekolahController;
@@ -39,6 +40,16 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
         Route::get('/{kelas}/edit', [KelasController::class, 'edit'])->name('kelas.edit');
         Route::patch('/{kelas}', [KelasController::class, 'update'])->name('kelas.update');
         Route::delete('/{kelas}', [KelasController::class, 'destroy'])->name('kelas.destroy');
+    });
+
+    Route::prefix('user/admin')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+        Route::get('/create', [AdminController::class, 'create'])->name('admin.create');
+        Route::post('/', [AdminController::class, 'store'])->name('admin.store');
+        Route::get('/{admin}', [AdminController::class, 'show'])->name('admin.show');
+        Route::get('/{admin}/edit', [AdminController::class, 'edit'])->name('admin.edit');
+        Route::patch('/{admin}', [AdminController::class, 'update'])->name('admin.update');
+        Route::delete('/{admin}', [AdminController::class, 'destroy'])->name('admin.destroy');
     });
 
     Route::prefix('user/guru')->group(function () {

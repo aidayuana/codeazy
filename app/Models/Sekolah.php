@@ -26,4 +26,9 @@ class Sekolah extends Model
     {
         return $this->hasMany(Kelas::class, 'sekolah_id', 'id');
     }
+
+    public function admin()
+    {
+        return $this->hasMany(Admin::class, 'sekolah_id', 'id');
+    }
 }

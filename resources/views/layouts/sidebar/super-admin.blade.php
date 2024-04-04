@@ -20,7 +20,7 @@
           <a href="element-card.html" class="link"><span>Super Admin</span></a>
         </li>
         <li>
-          <a href="element-ui.html" class="link"><span>Admin Sekolah</span></a>
+          <a href="{{ route('admin.index') }}" class="link"><span>Admin Sekolah</span></a>
         </li>
         <li>
           <a href="{{ route('guru.index') }}" class="link"><span>Guru</span></a>
