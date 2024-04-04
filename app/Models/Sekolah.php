@@ -31,4 +31,9 @@ class Sekolah extends Model
     {
         return $this->hasMany(Admin::class, 'sekolah_id', 'id');
     }
+
+    public function siswa()
+    {
+        return $this->hasMany(Siswa::class, 'sekolah_id', 'id');
+    }
 }

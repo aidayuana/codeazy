@@ -44,13 +44,18 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function admin()
+    {
+        return $this->hasOne(Admin::class, 'user_id', 'id');
+    }
+
     public function guru()
     {
         return $this->hasOne(Guru::class, 'user_id', 'id');
     }
 
-    public function admin()
+    public function siswa()
     {
-        return $this->hasOne(Admin::class, 'user_id', 'id');
+        return $this->hasOne(Siswa::class, 'user_id', 'id');
     }
 }
