@@ -10,7 +10,7 @@ class Admin extends Model
     use HasFactory;
 
     protected $table = 'admin';
-    protected $fillable = ['user_id', 'sekolah_id'];
+    protected $fillable = ['user_id', 'sekolah_id', 'approved'];
 
     public function user()
     {

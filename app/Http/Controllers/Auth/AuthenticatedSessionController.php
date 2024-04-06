@@ -40,11 +40,19 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $url = "";
         if ($request->user()->role == 'super_admin') {
             $url = '/super-admin/dashboard';
         } else if ($request->user()->role == 'admin') {
-            $url = '/admin/dashboard';
+            if ($request->user()->admin->approved == 1) {
+                $url = '/admin/dashboard';
+            } else {
+                // unaunthenticate
+                Auth::guard('web')->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                Alert::toast('Admin belum disetujui!', 'error');
+                return redirect()->back();
+            }
         } else if ($request->user()->role == 'guru') {
             $url = '/guru/dashboard';
         } else {

@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SekolahController;
+use App\Http\Controllers\SiswaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,6 +51,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
         Route::get('/{admin}/edit', [AdminController::class, 'edit'])->name('admin.edit');
         Route::patch('/{admin}', [AdminController::class, 'update'])->name('admin.update');
         Route::delete('/{admin}', [AdminController::class, 'destroy'])->name('admin.destroy');
+        Route::get('/{admin}/approve', [AdminController::class, 'approve'])->name('admin.approve');
     });
 
     Route::prefix('user/guru')->group(function () {
@@ -60,5 +62,15 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
         Route::get('/{guru}/edit', [GuruController::class, 'edit'])->name('guru.edit');
         Route::patch('/{guru}', [GuruController::class, 'update'])->name('guru.update');
         Route::delete('/{guru}', [GuruController::class, 'destroy'])->name('guru.destroy');
+    });
+
+    Route::prefix('/user/siswa')->group(function () {
+        Route::get('/', [SiswaController::class, 'index'])->name('siswa.index');
+        Route::get('/create', [SiswaController::class, 'create'])->name('siswa.create');
+        Route::post('/', [SiswaController::class, 'store'])->name('siswa.store');
+        Route::get('/{siswa}', [SiswaController::class, 'show'])->name('siswa.show');
+        Route::get('/{siswa}/edit', [SiswaController::class, 'edit'])->name('siswa.edit');
+        Route::patch('/{siswa}', [SiswaController::class, 'update'])->name('siswa.update');
+        Route::delete('/{siswa}', [SiswaController::class, 'destroy'])->name('siswa.destroy');
     });
 });

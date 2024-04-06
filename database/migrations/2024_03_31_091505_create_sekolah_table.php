@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('sekolah', function (Blueprint $table) {
             $table->id();
             $table->string('nama')->unique();
-            $table->char('npsn', 24)->unique();
-            $table->string('alamat');
+            $table->char('npsn', 24)->unique()->nullable();
+            $table->string('alamat')->nullable();
             $table->timestamps();
         });
     }

@@ -145,4 +145,21 @@ class AdminController extends Controller
             return redirect()->back();
         }
     }
+
+    /**
+     * Approve the specified resource from storage.
+     */
+    public function approve(Admin $admin)
+    {
+        try {
+            $admin->update([
+                'approved' => true,
+            ]);
+            Alert::toast('Data berhasil diapprove', 'success');
+            return redirect()->route('admin.index');
+        } catch (\Exception $e) {
+            Alert::toast($e->getMessage(), 'error');
+            return redirect()->back();
+        }
+    }
 }

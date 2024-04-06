@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('sekolah_id')->constrained('sekolah')->cascadeOnDelete();
+            $table->boolean('approved')->default(false);
             $table->timestamps();
         });
     }

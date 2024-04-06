@@ -43,8 +43,6 @@ class RegisteredUserController extends Controller
                 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
                 'sekolah' => ['required'],
-                'alamat' => ['required'],
-                'npsn' => ['required'],
             ]);
         } elseif ($request->role == 'guru') {
             $validator = Validator::make($request->all(), [
@@ -80,9 +78,7 @@ class RegisteredUserController extends Controller
             ]);
         } elseif ($request->role == 'admin') {
             Sekolah::create([
-                'npsn' => $request->npsn,
                 'nama' => $request->sekolah,
-                'alamat' => $request->alamat,
             ]);
             $user->admin()->create([
                 'sekolah_id' => Sekolah::latest()->first()->id,

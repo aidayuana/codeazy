@@ -75,7 +75,17 @@
             <a href="#" class="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <div class="label">
                 <span></span>
-                <div>{{ Auth::user()->name }}</div>
+                <div>
+                  @if (Auth::user()->role == 'super_admin')
+                    Super Admin
+                  @elseif(Auth::user()->role == 'admin')
+                    Admin
+                  @elseif(Auth::user()->role == 'guru')
+                    Guru
+                  @else
+                    Siswa
+                  @endif
+                </div>
               </div>
               <i class="ti-arrow-circle-down"></i>
             </a>

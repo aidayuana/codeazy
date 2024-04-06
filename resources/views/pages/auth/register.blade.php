@@ -95,22 +95,6 @@
                 <span class="input-group-text rounded-end">&nbsp<i class="fa fa-school"></i>&nbsp</span>
               </div>
             </div>
-            <div>
-              <label class="mb-2 text-muted" for="alamat">Alamat</label>
-              <div class="input-group input-group-join">
-                <input type="text" placeholder="Masukkan Alamat" id="alamat" class="form-control"
-                  name="alamat" autofocus>
-                <span class="input-group-text rounded-end">&nbsp<i class="fa fa-school"></i></i>&nbsp</span>
-              </div>
-            </div>
-            <div>
-              <label class="mb-2 text-muted" for="npsn">NPSN</label>
-              <div class="input-group input-group-join">
-                <input type="text" placeholder="Masukkan NPSN" id="npsn" class="form-control"
-                  name="npsn" autofocus>
-                <span class="input-group-text rounded-end">&nbsp<i class="fa fa-id-card"></i>&nbsp</span>
-              </div>
-            </div>
           </div>
 
           <div class="d-flex align-items-center">
@@ -131,6 +115,80 @@
     </div>
   </div>
   <script>
-  $(document).ready(function(){let e=$("#password"),a=$("#password_confirmation");$("#eye-1").click(function(){"password"===e.attr("type")?(e.attr("type","text"),$("#eye-1").removeClass("fa-eye").addClass("fa-eye-slash")):(e.attr("type","password"),$("#eye-1").removeClass("fa-eye-slash").addClass("fa-eye"))}),$("#eye-2").click(function(){"password"===a.attr("type")?(a.attr("type","text"),$("#eye-2").removeClass("fa-eye").addClass("fa-eye-slash")):(a.attr("type","password"),$("#eye-2").removeClass("fa-eye-slash").addClass("fa-eye"))});let s=$("#role"),t=$("#admin_form"),o=$("#sekolah_input"),d=$("#kelas_input"),l=$("#kelas_id"),n=$("#sekolah"),r=$("#sekolah_id"),i=$("#alamat"),p=$("#npsn");s.change(function(){"admin"===s.val()?(t.addClass("d-flex").removeClass("d-none"),o.addClass("d-none").removeClass("d-block"),i.attr("required",!0),p.attr("required",!0),n.attr("required",!0)):("siswa"===s.val()&&(d.addClass("d-block").removeClass("d-none"),l.attr("required",!0)),t.addClass("d-none").removeClass("d-flex"),o.addClass("d-block").removeClass("d-none"),r.attr("required",!0))}),$("#sekolah_id").change(function(){""!==r.val()&&$.ajax({url:"{{ route('kelas.getBySekolah') }}",type:"POST",data:{_token:"{{ csrf_token() }}",sekolah_id:r.val()},success:function(e){e.length>0?$.each(e,function(e,a){l.append('<option value="'+a.id+'">'+a.nama_kelas+"</option>")}):l.append('<option value="">Tidak ada data kelas</option>')},error:function(e){console.log(e)}})})});
+    $(document).ready(function() {
+      // Show or hide password
+      const password = $('#password');
+      const passwordConfirmation = $('#password_confirmation');
+      $('#eye-1').click(function() {
+        if (password.attr('type') === 'password') {
+          password.attr('type', 'text');
+          $('#eye-1').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+          password.attr('type', 'password');
+          $('#eye-1').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+      });
+      $('#eye-2').click(function() {
+        if (passwordConfirmation.attr('type') === 'password') {
+          passwordConfirmation.attr('type', 'text');
+          $('#eye-2').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+          passwordConfirmation.attr('type', 'password');
+          $('#eye-2').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+      });
+      const role = $('#role');
+      const adminForm = $('#admin_form');
+      const sekolahInput = $('#sekolah_input');
+      const kelasInput = $('#kelas_input');
+      const kelasId = $('#kelas_id');
+      const sekolah = $('#sekolah');
+      const idSekolah = $('#sekolah_id');
+      role.change(function() {
+        if (role.val() === 'admin') {
+          adminForm.addClass('d-flex').removeClass('d-none');
+          sekolahInput.addClass('d-none').removeClass('d-block');
+          kelasInput.addClass('d-none').removeClass('d-block');
+          sekolah.attr('required', true);
+        } else {
+          if (role.val() === 'siswa') {
+            kelasInput.addClass('d-block').removeClass('d-none');
+            kelasId.attr('required', true);
+          } else {
+            kelasInput.addClass('d-none').removeClass('d-block');
+          }
+          adminForm.addClass('d-none').removeClass('d-flex');
+          sekolahInput.addClass('d-block').removeClass('d-none');
+          idSekolah.attr('required', true);
+        }
+      });
+      $('#sekolah_id').change(function() {
+        if (idSekolah.val() !== '') {
+          $.ajax({
+            url: `{{ route('kelas.getBySekolah') }}`,
+            type: 'POST',
+            data: {
+              _token: '{{ csrf_token() }}',
+              sekolah_id: idSekolah.val()
+            },
+            success: function(data) {
+              console.log(data);
+              if (data.length > 0) {
+                $.each(data, function(index, kelas) {
+                  kelasId.append('<option value="' + kelas.id + '">' + kelas.nama_kelas +
+                    '</option>');
+                });
+              } else {
+                // Handle the case where no kelas are found
+                kelasId.append('<option value="">Tidak ada data kelas</option>');
+              }
+            },
+            error: function(err) {
+              console.log(err);
+            }
+          });
+        }
+      });
+    });
   </script>
 @endsection
