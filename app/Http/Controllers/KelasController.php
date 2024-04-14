@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kelas;
 use App\Models\Sekolah;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -15,8 +16,11 @@ class KelasController extends Controller
      */
     public function index(Request $request)
     {
+        if (Auth::user()->role == 'super_admin')
+            $data = Kelas::with('sekolah')->latest()->get();
+        else
+            $data = Kelas::with('sekolah')->where('sekolah_id', Auth::user()->admin->sekolah_id)->latest()->get();
         if ($request->ajax()) {
-            $data = Kelas::with(['sekolah'])->latest()->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -55,7 +59,10 @@ class KelasController extends Controller
         try {
             Kelas::create($request->all());
             Alert::toast('Data kelas berhasil ditambahkan!', 'success');
-            return redirect()->route('kelas.index');
+            if (Auth::user()->role == 'super_admin')
+                return redirect()->route('kelas.index');
+            else
+                return redirect()->route('admin.kelas.index');
         } catch (\Exception $e) {
             Alert::toast($e->getMessage(), 'error');
             return redirect()->back()->withInput();
@@ -89,7 +96,10 @@ class KelasController extends Controller
         try {
             $kelas->update($request->all());
             Alert::toast('Data kelas berhasil diubah!', 'success');
-            return redirect()->route('kelas.index');
+            if (Auth::user()->role == 'super_admin')
+                return redirect()->route('kelas.index');
+            else
+                return redirect()->route('admin.kelas.index');
         } catch (\Exception $e) {
             Alert::toast($e->getMessage(), 'error');
             return redirect()->back()->withInput();
@@ -104,7 +114,10 @@ class KelasController extends Controller
         try {
             $kelas->delete();
             Alert::toast('Data kelas berhasil dihapus!', 'success');
-            return redirect()->route('kelas.index');
+            if (Auth::user()->role == 'super_admin')
+                return redirect()->route('kelas.index');
+            else
+                return redirect()->route('admin.kelas.index');
         } catch (\Exception $e) {
             Alert::toast($e->getMessage(), 'error');
             return redirect()->back();

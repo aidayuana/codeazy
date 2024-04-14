@@ -7,9 +7,15 @@
         <div class="card">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h4>List Data Kelas</h4>
-            <a class="btn btn-success" href="{{ route('kelas.create') }}">
-              Tambah Kelas
-            </a>
+            @if (Auth::user()->role == 'super_admin')
+              <a class="btn btn-success" href="{{ route('kelas.create') }}">
+                Tambah Kelas
+              </a>
+            @else
+              <a class="btn btn-success" href="{{ route('admin.kelas.create') }}">
+                Tambah Kelas
+              </a>
+            @endif
           </div>
           <div class="card-body table-responsive">
             <table class="table table-bordered data-table">
@@ -39,7 +45,11 @@
       const table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('kelas.index') }}",
+        @if (Auth::user()->role == 'super_admin')
+          ajax: "{{ route('kelas.index') }}",
+        @else
+          ajax: "{{ route('admin.kelas.index') }}",
+        @endif
         columns: [{
             data: 'DT_RowIndex',
             name: 'DT_RowIndex'

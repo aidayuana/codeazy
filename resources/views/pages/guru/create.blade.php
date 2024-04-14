@@ -1,9 +1,15 @@
 @extends('layouts.master')
 @section('main')
   <div class="title d-flex align-items-center">
-    <a href="{{ route('guru.index') }}" class="text-decoration-none">
-      <i class="ti-arrow-circle-left"></i>
-    </a>
+    @if (Auth::user()->role == 'super_admin')
+      <a href="{{ route('guru.index') }}" class="text-decoration-none">
+        <i class="ti-arrow-circle-left"></i>
+      </a>
+    @else
+      <a href="{{ route('admin.guru.index') }}" class="text-decoration-none">
+        <i class="ti-arrow-circle-left"></i>
+      </a>
+    @endif
     <span class="ms-2">Tambah Guru</span>
   </div>
   <div class="content-wrapper">

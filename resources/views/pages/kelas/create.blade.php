@@ -1,9 +1,15 @@
 @extends('layouts.master')
 @section('main')
   <div class="title d-flex align-items-center">
-    <a href="{{ route('kelas.index') }}" class="text-decoration-none">
-      <i class="ti-arrow-circle-left"></i>
-    </a>
+    @if (Auth::user()->role == 'super_admin')
+      <a href="{{ route('kelas.index') }}" class="text-decoration-none">
+        <i class="ti-arrow-circle-left"></i>
+      </a>
+    @else
+      <a href="{{ route('admin.kelas.index') }}" class="text-decoration-none">
+        <i class="ti-arrow-circle-left"></i>
+      </a>
+    @endif
     <span class="ms-2">Tambah Kelas</span>
   </div>
   <div class="content-wrapper">
@@ -14,7 +20,10 @@
             <h4>Form Tambah Kelas</h4>
           </div>
           <div class="card-body">
-            <form method="POST" action="{{ route('kelas.store') }}" class="form-horizontal d-flex flex-column gap-3">
+            <form method="POST"
+              @if (Auth::user()->role == 'super_admin') action="{{ route('kelas.store') }}"
+                @else action="{{ route('admin.kelas.store') }}" @endif
+              class="form-horizontal d-flex flex-column gap-3">
               @csrf
               <div class="form-group">
                 <label for="name" class="mb-1 control-label">Nama Kelas</label>
