@@ -6,6 +6,7 @@ use App\Models\Guru;
 use App\Models\Sekolah;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -16,8 +17,11 @@ class GuruController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
+        if (Auth::user()->role == 'super_admin')
             $data = Guru::with(['user', 'sekolah'])->latest()->get();
+        else
+            $data = Guru::with(['user', 'sekolah'])->where('sekolah_id', Auth::user()->admin->sekolah_id)->latest()->get();
+        if ($request->ajax()) {
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -76,7 +80,10 @@ class GuruController extends Controller
                     'mata_pelajaran' => $request->mata_pelajaran,
                 ]);
                 Alert::toast('Data guru berhasil ditambahkan!', 'success');
-                return redirect()->route('guru.index');
+                if (auth()->user()->role == 'super_admin')
+                    return redirect()->route('guru.index');
+                else
+                    return redirect()->route('admin.guru.index');
             } else {
                 $user->delete();
                 Alert::toast('Data guru gagal ditambahkan!', 'error');
@@ -140,7 +147,10 @@ class GuruController extends Controller
                 ]
             ]);
             Alert::toast('Data guru berhasil diubah!', 'success');
-            return redirect()->route('guru.index');
+            if (auth()->user()->role == 'super_admin')
+                return redirect()->route('guru.index');
+            else
+                return redirect()->route('admin.guru.index');
         } catch (\Exception $e) {
             Alert::toast($e->getMessage(), 'error');
             return redirect()->back()->withInput();
@@ -150,13 +160,15 @@ class GuruController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Guru $guru)
+    public function destroy(User $guru)
     {
         try {
             $guru->delete();
-            $guru->user->delete();
             Alert::toast('Data guru berhasil dihapus!', 'success');
-            return redirect()->route('guru.index');
+            if (auth()->user()->role == 'super_admin')
+                return redirect()->route('guru.index');
+            else
+                return redirect()->route('admin.guru.index');
         } catch (\Exception $e) {
             Alert::toast($e->getMessage(), 'error');
             return redirect()->back();

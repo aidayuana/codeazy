@@ -14,15 +14,17 @@
             <h4>Form Edit Guru</h4>
           </div>
           <div class="card-body">
-            <form method="POST" action="{{ route('guru.update', $guru->id) }}"
+            <form method="POST"
+              @if (Auth::user()->role == 'super_admin') action="{{ route('guru.update', $guru->id) }}"
+                @else action="{{ route('admin.guru.update', $guru->id) }}" @endif
               class="form-horizontal d-flex flex-column gap-3">
               @csrf
               @method('PATCH')
               <div class="form-group">
                 <label for="name" class="mb-1 control-label">Nama Guru</label>
                 <div class="col-sm-12">
-                  <input type="text" class="form-control" id="name" name="name"
-                    placeholder="Nama Guru" value="{{ old('name', $guru->name) }}" required />
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Nama Guru"
+                    value="{{ old('name', $guru->name) }}" required />
                 </div>
               </div>
 
@@ -45,8 +47,8 @@
               <div class="form-group">
                 <label for="password" class="mb-1 control-label">Password</label>
                 <div class="col-sm-12">
-                  <input type="password" class="form-control" id="password" name="password"
-                    placeholder="Password" value="{{ old('password') }}" required />
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+                    value="{{ old('password') }}" required />
                 </div>
               </div>
 
@@ -78,8 +80,8 @@
                 <label for="mata_pelajaran" class="mb-1 control-label">Mata Pelajaran</label>
                 <div class="col-sm-12">
                   <input type="text" class="form-control" id="mata_pelajaran" name="mata_pelajaran"
-                    placeholder="Mata Pelajaran"
-                    value="{{ old('mata_pelajaran', $guru->guru->mata_pelajaran) }}" required />
+                    placeholder="Mata Pelajaran" value="{{ old('mata_pelajaran', $guru->guru->mata_pelajaran) }}"
+                    required />
                 </div>
               </div>
 

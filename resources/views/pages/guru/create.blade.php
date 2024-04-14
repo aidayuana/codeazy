@@ -14,14 +14,17 @@
             <h4>Form Tambah Guru</h4>
           </div>
           <div class="card-body">
-            <form method="POST" action="{{ route('guru.store') }}"
+            <form method="POST"
+              @if (Auth::user()->role == 'super_admin') action="{{ route('guru.store') }}"
+            @else
+                action="{{ route('admin.guru.store') }}" @endif
               class="form-horizontal d-flex flex-column gap-3">
               @csrf
               <div class="form-group">
                 <label for="name" class="mb-1 control-label">Nama Guru</label>
                 <div class="col-sm-12">
-                  <input type="text" class="form-control" id="name" name="name"
-                    placeholder="Nama Guru" value="{{ old('name') }}" required />
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Nama Guru"
+                    value="{{ old('name') }}" required />
                 </div>
               </div>
 
@@ -44,8 +47,8 @@
               <div class="form-group">
                 <label for="password" class="mb-1 control-label">Password</label>
                 <div class="col-sm-12">
-                  <input type="password" class="form-control" id="password" name="password"
-                    placeholder="Password" value="{{ old('password') }}" required />
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+                    value="{{ old('password') }}" required />
                 </div>
               </div>
 
@@ -57,20 +60,31 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <label for="sekolah_id" class="mb-1 control-label">Asal Sekolah</label>
-                <div class="col-sm-12">
-                  <select class="form-select" id="sekolah_id" name="sekolah_id" required>
-                    <option value="">Pilih Asal Sekolah</option>
-                    @foreach ($dataSekolah as $item)
-                      <option value="{{ $item->id }}"
-                        {{ old('sekolah_id') == $item->id ? 'selected' : '' }}>
-                        {{ $item->nama }}
-                      </option>
-                    @endforeach
-                  </select>
+              @if (Auth::user()->role == 'super_admin')
+                <div class="form-group">
+                  <label for="sekolah_id" class="mb-1 control-label">Asal Sekolah</label>
+                  <div class="col-sm-12">
+                    <select class="form-select" id="sekolah_id" name="sekolah_id" required>
+                      <option value="">Pilih Asal Sekolah</option>
+                      @foreach ($dataSekolah as $item)
+                        <option value="{{ $item->id }}" {{ old('sekolah_id') == $item->id ? 'selected' : '' }}>
+                          {{ $item->nama }}
+                        </option>
+                      @endforeach
+                    </select>
+                  </div>
                 </div>
-              </div>
+              @else
+                {{-- text readonly current sekolah name and hidden sekolah id --}}
+                <input type="hidden" name="sekolah_id" value="{{ Auth::user()->admin->sekolah_id }}">
+                <div class="form-group">
+                  <label for="sekolah" class="mb-1 control-label">Asal Sekolah</label>
+                  <div class="col-sm-12">
+                    <input type="text" class="form-control" id="sekolah"
+                      value="{{ Auth::user()->admin->sekolah->nama }}" readonly />
+                  </div>
+                </div>
+              @endif
 
               {{-- mata pelajaran --}}
               <div class="form-group">

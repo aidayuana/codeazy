@@ -21,24 +21,36 @@
               <div class="form-group">
                 <label for="name" class="mb-1 control-label">Nama Kelas</label>
                 <div class="col-sm-12">
-                  <input type="text" class="form-control" id="name" name="nama_kelas"
-                    placeholder="Nama Kelas" value="{{ old('nama_kelas', $kelas->nama_kelas) }}" required />
+                  <input type="text" class="form-control" id="name" name="nama_kelas" placeholder="Nama Kelas"
+                    value="{{ old('nama_kelas', $kelas->nama_kelas) }}" required />
                 </div>
               </div>
-              <div class="form-group">
-                <label for="sekolah_id" class="mb-1 control-label">Asal Sekolah</label>
-                <div class="col-sm-12">
-                  <select class="form-select" id="sekolah_id" name="sekolah_id" required>
-                    <option value="">Pilih Asal Sekolah</option>
-                    @foreach ($dataSekolah as $item)
-                      <option value="{{ $item->id }}"
-                        {{ old('sekolah_id', $kelas->sekolah_id) == $item->id ? 'selected' : '' }}>
-                        {{ $item->nama }}
-                      </option>
-                    @endforeach
-                  </select>
+              @if (Auth::user()->role == 'super_admin')
+                <div class="form-group">
+                  <label for="sekolah_id" class="mb-1 control-label">Asal Sekolah</label>
+                  <div class="col-sm-12">
+                    <select class="form-select" id="sekolah_id" name="sekolah_id" required>
+                      <option value="">Pilih Asal Sekolah</option>
+                      @foreach ($dataSekolah as $item)
+                        <option value="{{ $item->id }}"
+                          {{ old('sekolah_id', $kelas->sekolah_id) == $item->id ? 'selected' : '' }}>
+                          {{ $item->nama }}
+                        </option>
+                      @endforeach
+                    </select>
+                  </div>
                 </div>
-              </div>
+              @else
+                {{-- text readonly current sekolah name and hidden sekolah id --}}
+                <input type="hidden" name="sekolah_id" value="{{ Auth::user()->admin->sekolah_id }}">
+                <div class="form-group">
+                  <label for="sekolah" class="mb-1 control-label">Asal Sekolah</label>
+                  <div class="col-sm-12">
+                    <input type="text" class="form-control" id="sekolah"
+                      value="{{ Auth::user()->admin->sekolah->nama }}" readonly />
+                  </div>
+                </div>
+              @endif
 
               <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-primary">

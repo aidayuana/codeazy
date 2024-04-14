@@ -10,16 +10,16 @@
           <div class="mb-3">
             <label class="mb-2 text-muted" for="name">Full Name</label>
             <div class="input-group input-group-join mb-3">
-              <input type="text" placeholder="Enter Your Name" id="name" class="form-control"
-                name="name" required autofocus autocomplete="name">
+              <input type="text" placeholder="Enter Your Name" id="name" class="form-control" name="name"
+                required autofocus autocomplete="name">
               <span class="input-group-text rounded-end">&nbsp<i class="fa fa-user"></i>&nbsp</span>
             </div>
           </div>
           <div class="mb-3">
             <label class="mb-2 text-muted" for="email">E-Mail Address</label>
             <div class="input-group input-group-join mb-3">
-              <input id="email" type="email" placeholder="Enter Email" class="form-control" name="email"
-                required autofocus autocomplete="username">
+              <input id="email" type="email" placeholder="Enter Email" class="form-control" name="email" required
+                autofocus autocomplete="username">
               <span class="input-group-text rounded-end">&nbsp<i class="fa fa-envelope"></i>&nbsp</span>
             </div>
           </div>
@@ -29,8 +29,8 @@
               <label class="text-muted" for="password">Password</label>
             </div>
             <div class="input-group input-group-join mb-3">
-              <input type="password" class="form-control" id="password" placeholder="Your password"
-                name="password" required>
+              <input type="password" class="form-control" id="password" placeholder="Your password" name="password"
+                required>
               <span class="input-group-text rounded-end password cursor-pointer">
                 &nbsp<i id="eye-1" class="fa fa-eye"></i>&nbsp
               </span>
@@ -41,8 +41,8 @@
               <label class="text-muted" for="password">Confirm Password</label>
             </div>
             <div class="input-group input-group-join mb-3">
-              <input type="password" class="form-control" id="password_confirmation"
-                placeholder="Confirm Your Password" name="password_confirmation" required>
+              <input type="password" class="form-control" id="password_confirmation" placeholder="Confirm Your Password"
+                name="password_confirmation" required>
               <span class="input-group-text rounded-end password cursor-pointer">
                 &nbsp
                 <i id="eye-2" class="fa fa-eye"></i>&nbsp
@@ -63,7 +63,7 @@
             </div>
           </div>
 
-          <div id="sekolah_input" class="mb-3 d-block">
+          <div id="sekolah_input" class="mb-3">
             <label class="mb-2 text-muted" for="sekolah_id">Asal Sekolah</label>
             <div class="input-group input-group-join mb-3">
               <select name="sekolah_id" id="sekolah_id" class="form-select">
