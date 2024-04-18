@@ -16,6 +16,7 @@
               <thead>
                 <tr>
                   <th>No</th>
+                  <th>Nama Guru</th>
                   <th>Nama Course</th>
                   <th>Deskripsi</th>
                   <th width="280px">Action</th>
@@ -43,12 +44,16 @@
             name: 'DT_RowIndex'
           },
           {
-            data: 'name',
-            name: 'name'
+            data: 'guru.user.name',
+            name: 'guru.user.name'
           },
           {
-            data: 'description',
-            name: 'description'
+            data: 'course.name',
+            name: 'course.name'
+          },
+          {
+            data: 'course.description',
+            name: 'course.description'
           },
           {
             data: 'action',

@@ -47,7 +47,7 @@ class KelasController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama_kelas' => 'required|unique:kelas,nama_kelas',
+            'nama_kelas' => 'required',
             'sekolah_id' => 'required',
         ]);
 
@@ -84,7 +84,7 @@ class KelasController extends Controller
     public function update(Request $request, Kelas $kelas)
     {
         $validator = Validator::make($request->all(), [
-            'nama_kelas' => 'required|unique:kelas,nama_kelas,' . $kelas->id,
+            'nama_kelas' => 'required',
             'sekolah_id' => 'required',
         ]);
 

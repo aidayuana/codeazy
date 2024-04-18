@@ -24,7 +24,6 @@
                   <th>No</th>
                   <th>Nama Guru</th>
                   <th>NIP</th>
-                  <th>Mata Pelajaran</th>
                   @if (Auth::user()->role == 'super_admin')
                     <th>Asal Sekolah</th>
                   @endif
@@ -63,10 +62,6 @@
           {
             data: 'nip',
             name: 'nip'
-          },
-          {
-            data: 'mata_pelajaran',
-            name: 'mata_pelajaran'
           },
           @if (Auth::user()->role == 'super_admin')
             {

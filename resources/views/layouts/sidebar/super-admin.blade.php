@@ -17,9 +17,6 @@
       </a>
       <ul class="sub-menu">
         <li>
-          <a href="element-card.html" class="link"><span>Super Admin</span></a>
-        </li>
-        <li>
           <a href="{{ route('admin.index') }}" class="link"><span>Admin Sekolah</span></a>
         </li>
         <li>
