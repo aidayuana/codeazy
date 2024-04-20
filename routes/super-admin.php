@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SekolahController;
@@ -20,9 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth', 'role:super_admin'])->group(function () {
-    Route::get('/super-admin/dashboard', function () {
-        return view('pages.dashboard.super-admin-dashboard');
-    })->name('dashboard.super-admin');
+    Route::get('/super-admin/dashboard', [DashboardController::class, 'superAdmin'])->name('dashboard.super-admin');
 
     Route::prefix('sekolah')->group(function () {
         Route::get('/', [SekolahController::class, 'index'])->name('sekolah.index');

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\ProfileController;
@@ -20,9 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('pages.dashboard.admin-dashboard');
-    })->name('dashboard.admin');
+    Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('dashboard.admin');
 
     Route::get('admin/guru', [GuruController::class, 'index'])->name('admin.guru.index');
     Route::get('admin/guru/create', [GuruController::class, 'create'])->name('admin.guru.create');
