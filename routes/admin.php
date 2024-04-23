@@ -30,13 +30,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::patch('admin/guru/{guru}', [GuruController::class, 'update'])->name('admin.guru.update');
     Route::delete('admin/guru/{guru}', [GuruController::class, 'destroy'])->name('admin.guru.destroy');
 
-    Route::get('/admin/kelas', [KelasController::class, 'index'])->name('admin.kelas.index');
-    Route::get('/admin/kelas/create', [KelasController::class, 'create'])->name('admin.kelas.create');
-    Route::post('/admin/kelas', [KelasController::class, 'store'])->name('admin.kelas.store');
-    Route::get('/admin/kelas/{kelas}/edit', [KelasController::class, 'edit'])->name('admin.kelas.edit');
-    Route::patch('/admin/kelas/{kelas}', [KelasController::class, 'update'])->name('admin.kelas.update');
-    Route::delete('/admin/kelas/{kelas}', [KelasController::class, 'destroy'])->name('admin.kelas.destroy');
-
     Route::get('/admin/course', [SekolahCourseController::class, 'index'])->name('admin.course.index');
     Route::get('/admin/course/create', [SekolahCourseController::class, 'create'])->name('admin.course.create');
     Route::post('/admin/course', [SekolahCourseController::class, 'store'])->name('admin.course.store');

@@ -21,14 +21,14 @@
         </li>
       </ul>
     </li>
-    <li>
+    <li class="{{ request()->routeIs(['admin.kelas*']) ? 'active' : '' }}">
       <a href="#" class="main-menu has-dropdown">
         <i class="fa-solid fa-school"></i>
         <span>Course & Modul</span>
       </a>
       <ul class="sub-menu">
         <li>
-          <a href="form-element.html" class="link"> <span>Kelas</span></a>
+          <a href="{{ route('admin.kelas.index') }}" class="link"> <span>Kelas</span></a>
         </li>
         <li>
           <a href="form-element.html" class="link"> <span>Course</span></a>

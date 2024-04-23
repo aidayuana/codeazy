@@ -40,6 +40,15 @@ Route::middleware(['auth', 'role:super_admin,admin,guru'])->group(function () {
     });
 });
 
+Route::middleware(['auth', 'role:admin,guru'])->group(function () {
+    Route::get('/admin/kelas', [KelasController::class, 'index'])->name('admin.kelas.index');
+    Route::get('/admin/kelas/create', [KelasController::class, 'create'])->name('admin.kelas.create');
+    Route::post('/admin/kelas', [KelasController::class, 'store'])->name('admin.kelas.store');
+    Route::get('/admin/kelas/{kelas}/edit', [KelasController::class, 'edit'])->name('admin.kelas.edit');
+    Route::patch('/admin/kelas/{kelas}', [KelasController::class, 'update'])->name('admin.kelas.update');
+    Route::delete('/admin/kelas/{kelas}', [KelasController::class, 'destroy'])->name('admin.kelas.destroy');
+});
+
 require __DIR__ . '/auth.php';
 require __DIR__ . '/super-admin.php';
 require __DIR__ . '/admin.php';

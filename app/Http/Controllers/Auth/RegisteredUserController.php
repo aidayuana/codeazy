@@ -57,6 +57,8 @@ class RegisteredUserController extends Controller
                 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
                 'sekolah_id' => ['required'],
+                'kelas_id' => ['required'],
+                'nis' => ['required'],
             ]);
         }
 
@@ -87,6 +89,7 @@ class RegisteredUserController extends Controller
             $user->siswa()->create([
                 'sekolah_id' => $request->sekolah_id,
                 'kelas_id' => $request->kelas_id,
+                'nis' => $request->nis,
             ]);
         }
 

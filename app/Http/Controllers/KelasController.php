@@ -18,8 +18,10 @@ class KelasController extends Controller
     {
         if (Auth::user()->role == 'super_admin')
             $data = Kelas::with('sekolah')->latest()->get();
-        else
+        elseif (Auth::user()->role == 'admin')
             $data = Kelas::with('sekolah')->where('sekolah_id', Auth::user()->admin->sekolah_id)->latest()->get();
+        else
+            $data = Kelas::with('sekolah')->where('sekolah_id', Auth::user()->guru->sekolah_id)->latest()->get();
         if ($request->ajax()) {
             return datatables()->of($data)
                 ->addIndexColumn()
