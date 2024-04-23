@@ -169,6 +169,9 @@
             nisId.attr('required', true);
           } else {
             kelasInput.addClass('d-none').removeClass('d-block');
+            nisInput.addClass('d-none').removeClass('d-block');
+            kelasId.attr('required', false);
+            nisId.attr('required', false);
           }
           adminForm.addClass('d-none').removeClass('d-flex');
           sekolahInput.addClass('d-block').removeClass('d-none');
