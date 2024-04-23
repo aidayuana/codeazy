@@ -25,8 +25,8 @@ class SiswaController extends Controller
                 $q->where('id', Auth::user()->admin->sekolah_id);
             })->latest()->get();
         else
-            $data = Siswa::with(['user', 'sekolah', 'kelas'])->whereHas('kelas', function ($q) {
-                $q->where('id', Auth::user()->guru->kelas_id);
+            $data = Siswa::with(['user', 'sekolah', 'kelas'])->whereHas('sekolah', function ($q) {
+                $q->where('id', Auth::user()->guru->sekolah_id);
             })->latest()->get();
 
         if ($request->ajax()) {
@@ -47,13 +47,15 @@ class SiswaController extends Controller
      */
     public function create()
     {
-        if (Auth::user()->role == 'admin')
+        if (Auth::user()->role == 'admin') {
             $idSekolah = Auth::user()->admin->sekolah_id;
-        else
+            $dataKelas = Kelas::where('sekolah_id', $idSekolah)->get();
+        } elseif (Auth::user()->role == 'guru') {
             $idSekolah = Auth::user()->guru->sekolah_id;
+            $dataKelas = Kelas::where('sekolah_id', $idSekolah)->get();
+        }
         $dataSekolah = Sekolah::all();
-        $dataKelas = Kelas::where('sekolah_id', $idSekolah)->get();
-
+        $dataKelas = Kelas::all();
         return view('pages.siswa.create', compact('dataSekolah', 'dataKelas'));
     }
 
@@ -118,12 +120,15 @@ class SiswaController extends Controller
      */
     public function edit(Siswa $siswa)
     {
-        if (Auth::user()->role == 'admin')
+        if (Auth::user()->role == 'admin') {
             $idSekolah = Auth::user()->admin->sekolah_id;
-        else
+            $dataKelas = Kelas::where('sekolah_id', $idSekolah)->get();
+        } elseif (Auth::user()->role == 'guru') {
             $idSekolah = Auth::user()->guru->sekolah_id;
+            $dataKelas = Kelas::where('sekolah_id', $idSekolah)->get();
+        }
         $dataSekolah = Sekolah::all();
-        $dataKelas = Kelas::where('sekolah_id', $idSekolah)->get();
+        $dataKelas = Kelas::all();
 
         return view('pages.siswa.edit', compact('siswa', 'dataSekolah', 'dataKelas'));
     }
