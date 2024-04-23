@@ -172,14 +172,14 @@
               sekolah_id: idSekolah.val()
             },
             success: function(data) {
-              console.log(data);
               if (data.length > 0) {
+                kelasId.find('option').remove().end();
                 $.each(data, function(index, kelas) {
                   kelasId.append('<option value="' + kelas.id + '">' + kelas.nama_kelas +
                     '</option>');
                 });
               } else {
-                // Handle the case where no kelas are found
+                kelasId.find('option').remove().end();
                 kelasId.append('<option value="">Tidak ada data kelas</option>');
               }
             },

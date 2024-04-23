@@ -7,6 +7,7 @@ use App\Models\Sekolah;
 use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -17,8 +18,18 @@ class SiswaController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
+        if (Auth::user()->role == 'super_admin')
             $data = Siswa::with(['user', 'sekolah', 'kelas'])->latest()->get();
+        elseif (Auth::user()->role == 'admin')
+            $data = Siswa::with(['user', 'sekolah', 'kelas'])->whereHas('sekolah', function ($q) {
+                $q->where('id', Auth::user()->admin->sekolah_id);
+            })->latest()->get();
+        else
+            $data = Siswa::with(['user', 'sekolah', 'kelas'])->whereHas('kelas', function ($q) {
+                $q->where('id', Auth::user()->guru->kelas_id);
+            })->latest()->get();
+
+        if ($request->ajax()) {
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -36,8 +47,12 @@ class SiswaController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->role == 'admin')
+            $idSekolah = Auth::user()->admin->sekolah_id;
+        else
+            $idSekolah = Auth::user()->guru->sekolah_id;
         $dataSekolah = Sekolah::all();
-        $dataKelas = Kelas::all();
+        $dataKelas = Kelas::where('sekolah_id', $idSekolah)->get();
 
         return view('pages.siswa.create', compact('dataSekolah', 'dataKelas'));
     }
@@ -103,8 +118,12 @@ class SiswaController extends Controller
      */
     public function edit(Siswa $siswa)
     {
+        if (Auth::user()->role == 'admin')
+            $idSekolah = Auth::user()->admin->sekolah_id;
+        else
+            $idSekolah = Auth::user()->guru->sekolah_id;
         $dataSekolah = Sekolah::all();
-        $dataKelas = Kelas::all();
+        $dataKelas = Kelas::where('sekolah_id', $idSekolah)->get();
 
         return view('pages.siswa.edit', compact('siswa', 'dataSekolah', 'dataKelas'));
     }

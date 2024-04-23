@@ -20,7 +20,7 @@
           <a href="{{ route('admin.guru.index') }}" class="link"><span>Guru</span></a>
         </li>
         <li>
-          <a href="element-tabs-collapse.html" class="link"><span>Siswa</span></a>
+          <a href="{{ route('siswa.index') }}" class="link"><span>Siswa</span></a>
         </li>
       </ul>
     </li>
@@ -40,12 +40,6 @@
           <a href="form-datepicker.html" class="link"> <span>Modul</span></a>
         </li>
       </ul>
-    </li>
-    <li>
-      <a href="#" class="link">
-        <i class="ti-alert"></i>
-        <span>Permission</span>
-      </a>
     </li>
   </ul>
 </div>

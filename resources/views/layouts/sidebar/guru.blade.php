@@ -10,14 +10,14 @@
     <li class="menu-category">
       <span class="text-uppercase">Management Data</span>
     </li>
-    <li>
+    <li class="{{ request()->routeIs(['siswa*']) ? 'active' : '' }}">
       <a href="#" class="main-menu has-dropdown">
         <i class="fa-solid fa-users"></i>
         <span>User</span>
       </a>
       <ul class="sub-menu">
         <li>
-          <a href="element-tabs-collapse.html" class="link"><span>Siswa</span></a>
+          <a href="{{ route('siswa.index') }}" class="link"><span>Siswa</span></a>
         </li>
       </ul>
     </li>
@@ -37,12 +37,6 @@
           <a href="form-datepicker.html" class="link"> <span>Modul</span></a>
         </li>
       </ul>
-    </li>
-    <li>
-      <a href="#" class="link">
-        <i class="ti-alert"></i>
-        <span>Permission</span>
-      </a>
     </li>
   </ul>
 </div>

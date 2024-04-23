@@ -23,7 +23,7 @@
           <a href="{{ route('guru.index') }}" class="link"><span>Guru</span></a>
         </li>
         <li>
-          <a href="element-tabs-collapse.html" class="link"><span>Siswa</span></a>
+          <a href="{{ route('siswa.index') }}" class="link"><span>Siswa</span></a>
         </li>
       </ul>
     </li>
