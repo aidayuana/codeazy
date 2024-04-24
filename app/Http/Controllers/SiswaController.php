@@ -47,15 +47,16 @@ class SiswaController extends Controller
      */
     public function create()
     {
+        $dataSekolah = Sekolah::all();
         if (Auth::user()->role == 'admin') {
             $idSekolah = Auth::user()->admin->sekolah_id;
             $dataKelas = Kelas::where('sekolah_id', $idSekolah)->get();
         } elseif (Auth::user()->role == 'guru') {
             $idSekolah = Auth::user()->guru->sekolah_id;
             $dataKelas = Kelas::where('sekolah_id', $idSekolah)->get();
+        } else {
+            $dataKelas = Kelas::all();
         }
-        $dataSekolah = Sekolah::all();
-        $dataKelas = Kelas::all();
         return view('pages.siswa.create', compact('dataSekolah', 'dataKelas'));
     }
 
@@ -120,15 +121,16 @@ class SiswaController extends Controller
      */
     public function edit(Siswa $siswa)
     {
+        $dataSekolah = Sekolah::all();
         if (Auth::user()->role == 'admin') {
             $idSekolah = Auth::user()->admin->sekolah_id;
             $dataKelas = Kelas::where('sekolah_id', $idSekolah)->get();
         } elseif (Auth::user()->role == 'guru') {
             $idSekolah = Auth::user()->guru->sekolah_id;
             $dataKelas = Kelas::where('sekolah_id', $idSekolah)->get();
+        } else {
+            $dataKelas = Kelas::all();
         }
-        $dataSekolah = Sekolah::all();
-        $dataKelas = Kelas::all();
 
         return view('pages.siswa.edit', compact('siswa', 'dataSekolah', 'dataKelas'));
     }
