@@ -31,4 +31,9 @@ class SekolahCourse extends Model
     {
         return $this->belongsTo(Guru::class, 'guru_id', 'id');
     }
+
+    public function modul()
+    {
+        return $this->hasMany(Modul::class, 'sekolah_course_id', 'id');
+    }
 }

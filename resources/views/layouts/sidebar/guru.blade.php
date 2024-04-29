@@ -21,7 +21,7 @@
         </li>
       </ul>
     </li>
-    <li class="{{ request()->routeIs(['admin.kelas*']) ? 'active' : '' }}">
+    <li class="{{ request()->routeIs(['admin.kelas*', 'guru.course*']) ? 'active' : '' }}">
       <a href="#" class="main-menu has-dropdown">
         <i class="fa-solid fa-school"></i>
         <span>Course & Modul</span>
@@ -31,7 +31,7 @@
           <a href="{{ route('admin.kelas.index') }}" class="link"> <span>Kelas</span></a>
         </li>
         <li>
-          <a href="form-element.html" class="link"> <span>Course</span></a>
+          <a href="{{ route('guru.course.index') }}" class="link"> <span>Course</span></a>
         </li>
         <li>
           <a href="form-datepicker.html" class="link"> <span>Modul</span></a>
