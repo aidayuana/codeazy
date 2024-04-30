@@ -21,7 +21,7 @@
           </div>
 
           <div class="d-flex align-items-center">
-            <button type="submit" class="btn btn-primary ms-auto">Login</button>
+            <button type="submit" class="btn btn-primary ms-auto">Submit</button>
           </div>
         </form>
       </div>
