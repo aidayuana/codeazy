@@ -14,7 +14,14 @@ class SekolahCourse extends Model
     protected $fillable = [
         'sekolah_id',
         'course_id',
-        'guru_id'
+        'guru_id',
+        'modul_name',
+        'file_path'
+    ];
+
+    protected $casts = [
+        'modul_name' => 'array',
+        'file_path' => 'array'
     ];
 
     public function sekolah()
@@ -30,10 +37,5 @@ class SekolahCourse extends Model
     public function guru()
     {
         return $this->belongsTo(Guru::class, 'guru_id', 'id');
-    }
-
-    public function modul()
-    {
-        return $this->hasMany(Modul::class, 'sekolah_course_id', 'id');
     }
 }

@@ -36,7 +36,7 @@ class SekolahCourseController extends Controller
      */
     public function create()
     {
-        $courses = Course::whereNotIn('id', SekolahCourse::where('sekolah_id', Auth::user()->admin->sekolah_id)->pluck('course_id'))->get();
+        $courses = Course::get();
         $guru = Guru::with('user')->where('sekolah_id', Auth::user()->admin->sekolah_id)->get();
         return view('pages.admin_course.create', compact('courses', 'guru'));
     }
