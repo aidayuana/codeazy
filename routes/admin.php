@@ -30,6 +30,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/course', [SekolahCourseController::class, 'index'])->name('admin.course.index');
     Route::get('/admin/course/create', [SekolahCourseController::class, 'create'])->name('admin.course.create');
     Route::post('/admin/course', [SekolahCourseController::class, 'store'])->name('admin.course.store');
+    Route::get('/admin/course/{sekolahCourse}', [SekolahCourseController::class, 'show'])->name('admin.course.show');
     Route::get('/admin/course/{sekolahCourse}/edit', [SekolahCourseController::class, 'edit'])->name('admin.course.edit');
     Route::patch('/admin/course/{sekolahCourse}', [SekolahCourseController::class, 'update'])->name('admin.course.update');
     Route::delete('/admin/course/{sekolahCourse}', [SekolahCourseController::class, 'destroy'])->name('admin.course.destroy');

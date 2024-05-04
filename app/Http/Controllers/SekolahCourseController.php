@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Guru;
+use App\Models\Modul;
 use App\Models\SekolahCourse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,7 +50,8 @@ class SekolahCourseController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'course_id' => 'required',
-                'guru_id' => 'required'
+                'guru_id' => 'required',
+                'file.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:8192'
             ]);
 
             if ($validator->fails()) {
@@ -57,13 +59,30 @@ class SekolahCourseController extends Controller
                 return redirect()->back()->withInput();
             }
 
-            SekolahCourse::create([
+            if (SekolahCourse::where('sekolah_id', Auth::user()->admin->sekolah_id)->where('course_id', $request->course_id)->where('guru_id', $request->guru_id)->exists()) {
+                Alert::error('Error', 'Course sudah terdaftar pada guru ini');
+                return redirect()->back()->withInput();
+            }
+
+            $sekolah_course = SekolahCourse::create([
                 'sekolah_id' => Auth::user()->admin->sekolah_id,
                 'course_id' => $request->course_id,
                 'guru_id' => $request->guru_id
             ]);
 
-            Alert::success('Success', 'Course added successfully');
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $file_name = date('d-m-Y') . '_' . $file->getClientOriginalName();
+                    $file_path = $file->storeAs('public/modul', $file_name);
+                    Modul::create([
+                        'nama' => $file_name,
+                        'file_path' => $file_path,
+                        'sekolah_course_id' => $sekolah_course->id
+                    ]);
+                }
+            }
+
+            Alert::success('Success', 'Course berhasil ditambahkan');
             return redirect()->route('admin.course.index');
         } catch (\Throwable $th) {
             Alert::error('Error', $th->getMessage());
@@ -74,9 +93,22 @@ class SekolahCourseController extends Controller
     /**
      * Display the specified resource.
      */
+    /**
+     * Display the specified resource.
+     */
     public function show(SekolahCourse $sekolahCourse)
     {
-        //
+        try {
+            if (Auth::user()->admin->sekolah_id !== $sekolahCourse->sekolah_id) {
+                Alert::error('Error', 'Anda tidak memiliki akses ke course ini');
+                return redirect()->route('admin.course.index');
+            }
+            $moduls = Modul::where('sekolah_course_id', $sekolahCourse->id)->get();
+            return view('pages.admin_course.show', compact('sekolahCourse', 'moduls'));
+        } catch (\Throwable $th) {
+            Alert::error('Error', $th->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
@@ -84,9 +116,19 @@ class SekolahCourseController extends Controller
      */
     public function edit(SekolahCourse $sekolahCourse)
     {
-        $courses = Course::get();
-        $guru = Guru::with('user')->where('sekolah_id', Auth::user()->admin->sekolah_id)->get();
-        return view('pages.admin_course.edit', compact('courses', 'sekolahCourse', 'guru'));
+        try {
+            if (Auth::user()->admin->sekolah_id !== $sekolahCourse->sekolah_id) {
+                Alert::error('Error', 'Anda tidak memiliki akses ke course ini');
+                return redirect()->route('admin.course.index');
+            }
+            $courses = Course::get();
+            $guru = Guru::with('user')->where('sekolah_id', Auth::user()->admin->sekolah_id)->get();
+            $moduls = Modul::where('sekolah_course_id', $sekolahCourse->id)->get();
+            return view('pages.admin_course.edit', compact('sekolahCourse', 'courses', 'guru', 'moduls'));
+        } catch (\Throwable $th) {
+            Alert::error('Error', $th->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
@@ -95,9 +137,14 @@ class SekolahCourseController extends Controller
     public function update(Request $request, SekolahCourse $sekolahCourse)
     {
         try {
+            if (Auth::user()->admin->sekolah_id !== $sekolahCourse->sekolah_id) {
+                Alert::error('Error', 'Anda tidak memiliki akses ke course ini');
+                return redirect()->back()->withInput();
+            }
             $validator = Validator::make($request->all(), [
                 'course_id' => 'required',
-                'guru_id' => 'required'
+                'guru_id' => 'required',
+                'file.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:8192'
             ]);
 
             if ($validator->fails()) {
@@ -105,11 +152,24 @@ class SekolahCourseController extends Controller
                 return redirect()->back()->withInput();
             }
 
-            $sekolahCourse->course_id = $request->course_id;
-            $sekolahCourse->guru_id = $request->guru_id;
-            $sekolahCourse->save();
+            $sekolahCourse->update([
+                'course_id' => $request->course_id,
+                'guru_id' => $request->guru_id
+            ]);
 
-            Alert::success('Success', 'Course updated successfully');
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $file_name = date('d-m-Y') . '_' . $file->getClientOriginalName();
+                    $file_path = $file->storeAs('public/modul', $file_name);
+                    Modul::create([
+                        'nama' => $file_name,
+                        'file_path' => $file_path,
+                        'sekolah_course_id' => $sekolahCourse->id
+                    ]);
+                }
+            }
+
+            Alert::success('Success', 'Course berhasil diupdate');
             return redirect()->route('admin.course.index');
         } catch (\Throwable $th) {
             Alert::error('Error', $th->getMessage());
@@ -123,12 +183,23 @@ class SekolahCourseController extends Controller
     public function destroy(SekolahCourse $sekolahCourse)
     {
         try {
+            if (Auth::user()->admin->sekolah_id !== $sekolahCourse->sekolah_id) {
+                Alert::error('Error', 'Anda tidak memiliki akses ke course ini');
+                return redirect()->back()->withInput();
+            }
+            Modul::where('sekolah_course_id', $sekolahCourse->id)->delete();
             $sekolahCourse->delete();
-            Alert::success('Success', 'Course deleted successfully');
+            Alert::success('Success', 'Course berhasil dihapus');
             return redirect()->route('admin.course.index');
         } catch (\Throwable $th) {
             Alert::error('Error', $th->getMessage());
             return redirect()->back()->withInput();
         }
+    }
+
+    public function downloadModul($id)
+    {
+        $modul = Modul::find($id);
+        return response()->download(storage_path('app/' . $modul->file_path));
     }
 }

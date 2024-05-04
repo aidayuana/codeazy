@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\ModulController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SekolahCourseController;
 use App\Http\Controllers\SiswaController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +25,8 @@ Route::get('/', function () {
 Route::post('/kelas/get-by-sekolah', [KelasController::class, 'getKelas'])->name('kelas.getBySekolah');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/download-modul/{modul}', [SekolahCourseController::class, 'downloadModul'])->name('modul.download');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -47,6 +51,9 @@ Route::middleware(['auth', 'role:admin,guru'])->group(function () {
     Route::get('/admin/kelas/{kelas}/edit', [KelasController::class, 'edit'])->name('admin.kelas.edit');
     Route::patch('/admin/kelas/{kelas}', [KelasController::class, 'update'])->name('admin.kelas.update');
     Route::delete('/admin/kelas/{kelas}', [KelasController::class, 'destroy'])->name('admin.kelas.destroy');
+
+    Route::post('/modul', [ModulController::class, 'store'])->name('modul.store');
+    Route::patch('/modul/{modul}', [ModulController::class, 'update'])->name('modul.update');
 });
 
 require __DIR__ . '/auth.php';
