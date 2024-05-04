@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SekolahCourse;
 
+use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Guru;
 use App\Models\Modul;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class SekolahCourseController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
