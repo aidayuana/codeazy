@@ -53,6 +53,7 @@ Route::middleware(['auth', 'role:admin,guru'])->group(function () {
 
     Route::post('/modul', [ModulController::class, 'store'])->name('modul.store');
     Route::patch('/modul/{modul}', [ModulController::class, 'update'])->name('modul.update');
+    Route::delete('/modul/{modul}', [ModulController::class, 'destroy'])->name('modul.destroy');
 });
 
 require __DIR__ . '/auth.php';

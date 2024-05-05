@@ -157,5 +157,49 @@
         });
       }
     });
+    $(document).on("click", ".delete-modul", function() {
+      let modulId = $(this).prev().prev().val();
+      Swal.fire({
+        title: 'Apakah Anda yakin?',
+        text: "Anda tidak akan dapat mengembalikan ini!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const formData = new FormData();
+          formData.append('_token', '{{ csrf_token() }}');
+          formData.append('_method', 'DELETE');
+          $.ajax({
+            url: `/modul/${modulId}`,
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Modul berhasil dihapus',
+                showConfirmButton: false,
+                timer: 1500,
+              }).then(() => {
+                window.location.reload();
+              });
+            },
+            error: function(xhr) {
+              console.log(xhr);
+              Swal.fire({
+                icon: 'error',
+                title: xhr.responseJSON.message,
+                showConfirmButton: false,
+                timer: 1500,
+              });
+            }
+          });
+        }
+      });
+    });
   </script>
 @endsection

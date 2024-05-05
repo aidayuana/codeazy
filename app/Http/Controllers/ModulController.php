@@ -109,7 +109,16 @@ class ModulController extends Controller
      */
     public function destroy(Modul $modul)
     {
-        //
+        try {
+            if ($modul->file_path) {
+                Storage::delete($modul->file_path);
+            }
+            $modul->delete();
+            return redirect()->route('admin.course.index');
+        } catch (\Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        }
     }
 
     public function downloadModul($id)
