@@ -111,4 +111,10 @@ class ModulController extends Controller
     {
         //
     }
+
+    public function downloadModul($id)
+    {
+        $modul = Modul::find($id);
+        return response()->download(storage_path('app/' . $modul->file_path));
+    }
 }

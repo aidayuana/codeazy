@@ -13,45 +13,65 @@
           <div class="card-body">
             <div class="d-flex flex-column gap-3">
               <div class="form-group">
-                <label for="guru_id" class="mb-1 control-label fw-bold">Guru</label>
-                <div class="col-sm-12">
+                <span class="fw-bold">Guru</span>
+                <div class="col-sm-12 mt-1">
                   <span>{{ $sekolahCourse->guru->user->name }}</span>
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="course_id" class="mb-1 control-label fw-bold">Course</label>
-                <div class="col-sm-12">
+                <span class="fw-bold">Course</span>
+                <div class="col-sm-12 mt-1">
                   <span>{{ $sekolahCourse->course->name }}</span>
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="deskripsi" class="mb-1 control-label fw-bold">Deskripsi</label>
-                <div class="col-sm-12">
+                <span class="fw-bold">Deskripsi</span>
+                <div class="col-sm-12 mt-1">
                   <span>{{ $sekolahCourse->course->description }}</span>
                 </div>
               </div>
 
-              <div class="d-flex flex-column gap-3">
-                @foreach ($sekolahCourse->modul as $modul)
-                  <div class="row">
-                    <div class="form-group col-10">
-                      <label for="file[{{ $modul->id }}]" class="mb-2 control-label fw-bold">
-                        Modul {{ $modul->sekolahCourse->course->name }} - {{ $modul->nama }}
-                      </label>
-                      <div class="col-sm-12">
-                        <a href="{{ route('modul.download', $modul->id) }}" class="btn btn-primary">Download</a>
-                      </div>
-                    </div>
-                  </div>
-                @endforeach
-              </div>
+              <table class="table table-bordered data-table">
+                <thead>
+                  <tr>
+                    <th width="24px">No</th>
+                    <th>Nama Modul</th>
+                    <th width="280px">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  </div>
+  <script type="text/javascript">
+    $(function() {
+      const table = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('admin.course.show', $sekolahCourse->id) }}",
+        columns: [{
+            data: 'DT_RowIndex',
+            name: 'DT_RowIndex'
+          },
+          {
+            data: 'nama',
+            name: 'nama'
+          },
+          {
+            data: 'action',
+            name: 'action',
+            orderable: false,
+            searchable: false
+          }
+        ]
+      });
+    });
+  </script>
 @endsection

@@ -37,7 +37,7 @@
 
           <div class="d-flex align-items-center">
             <div class="form-check">
-              <input type="checkbox" name="remember_me" id="remember_me" class="form-check-input" />
+              <input type="checkbox" name="remember" id="remember_me" class="form-check-input" />
               <label for="remember_me" class="form-check-label">Remember Me</label>
             </div>
             <button type="submit" class="btn btn-primary ms-auto">Login</button>

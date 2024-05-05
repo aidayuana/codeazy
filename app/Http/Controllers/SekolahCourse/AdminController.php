@@ -104,8 +104,17 @@ class AdminController extends Controller
                 Alert::error('Error', 'Anda tidak memiliki akses ke course ini');
                 return redirect()->route('admin.course.index');
             }
-            $moduls = Modul::where('sekolah_course_id', $sekolahCourse->id)->get();
-            return view('pages.admin_course.show', compact('sekolahCourse', 'moduls'));
+            $data = $sekolahCourse->modul->load('sekolahCourse.course');
+            if (request()->ajax()) {
+                return datatables()->of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return view('pages.admin_course.modul.actions', compact('row'));
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            }
+            return view('pages.admin_course.show', compact('sekolahCourse'));
         } catch (\Throwable $th) {
             Alert::error('Error', $th->getMessage());
             return redirect()->back()->withInput();
@@ -196,11 +205,5 @@ class AdminController extends Controller
             Alert::error('Error', $th->getMessage());
             return redirect()->back()->withInput();
         }
-    }
-
-    public function downloadModul($id)
-    {
-        $modul = Modul::find($id);
-        return response()->download(storage_path('app/' . $modul->file_path));
     }
 }

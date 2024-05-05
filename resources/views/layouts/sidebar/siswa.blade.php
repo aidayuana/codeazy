@@ -10,14 +10,14 @@
     <li class="menu-category">
       <span class="text-uppercase">Course & Modul</span>
     </li>
-    <li>
+    <li class="{{ request()->routeIs(['siswa.course*']) ? 'active' : '' }}">
       <a href="#" class="main-menu has-dropdown">
         <i class="fa-solid fa-school"></i>
         <span>Course & Modul</span>
       </a>
       <ul class="sub-menu">
         <li>
-          <a href="form-element.html" class="link"> <span>Course</span></a>
+          <a href="{{ route('siswa.course.index') }}" class="link"> <span>Course</span></a>
         </li>
       </ul>
     </li>

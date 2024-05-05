@@ -15,6 +15,7 @@
                   <th>No</th>
                   <th>Nama Course</th>
                   <th>Deskripsi</th>
+                  <th width="280px">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -27,9 +28,6 @@
   </div>
   <script type="text/javascript">
     $(function() {
-      /*------------------------------------------
-      Render DataTable
-      --------------------------------------------*/
       const table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
@@ -46,6 +44,12 @@
             data: 'course.description',
             name: 'course.description'
           },
+          {
+            data: 'action',
+            name: 'action',
+            orderable: false,
+            searchable: false
+          }
         ]
       });
     });

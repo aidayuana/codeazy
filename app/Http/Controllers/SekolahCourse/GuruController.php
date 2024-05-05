@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\SekolahCourse;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
 use App\Models\Modul;
 use App\Models\SekolahCourse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class GuruController extends Controller
 {
@@ -19,6 +22,10 @@ class GuruController extends Controller
         if ($request->ajax()) {
             return datatables()->of($data)
                 ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    return view('pages.guru_course.actions', compact('row'));
+                })
+                ->rawColumns(['action'])
                 ->make(true);
         }
 
@@ -26,27 +33,30 @@ class GuruController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(SekolahCourse $sekolahCourse)
     {
-        //
+        try {
+            if (Auth::user()->guru->sekolah_id !== $sekolahCourse->sekolah_id) {
+                Alert::error('Error', 'Anda tidak memiliki akses ke course ini');
+                return redirect()->route('guru.course.index');
+            }
+            $data = $sekolahCourse->modul->load('sekolahCourse.course');
+            if (request()->ajax()) {
+                return datatables()->of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return view('pages.guru_course.modul.actions', compact('row'));
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            }
+            return view('pages.guru_course.show', compact('sekolahCourse'));
+        } catch (\Throwable $th) {
+            Alert::error('Error', $th->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
@@ -54,7 +64,18 @@ class GuruController extends Controller
      */
     public function edit(SekolahCourse $sekolahCourse)
     {
-        //
+        try {
+            if (Auth::user()->guru->sekolah_id !== $sekolahCourse->sekolah_id) {
+                Alert::error('Error', 'Anda tidak memiliki akses ke course ini');
+                return redirect()->route('admin.course.index');
+            }
+            $courses = Course::get();
+            $moduls = Modul::where('sekolah_course_id', $sekolahCourse->id)->get();
+            return view('pages.guru_course.edit', compact('sekolahCourse', 'courses', 'moduls'));
+        } catch (\Throwable $th) {
+            Alert::error('Error', $th->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
@@ -62,14 +83,37 @@ class GuruController extends Controller
      */
     public function update(Request $request, SekolahCourse $sekolahCourse)
     {
-        //
-    }
+        try {
+            if (Auth::user()->guru->sekolah_id !== $sekolahCourse->sekolah_id) {
+                Alert::error('Error', 'Anda tidak memiliki akses ke course ini');
+                return redirect()->back()->withInput();
+            }
+            $validator = Validator::make($request->all(), [
+                'file.*' => 'nullable|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:8192'
+            ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(SekolahCourse $sekolahCourse)
-    {
-        //
+            if ($validator->fails()) {
+                Alert::error('Error', $validator->errors()->first());
+                return redirect()->back()->withInput();
+            }
+
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $file_name = date('d-m-Y') . '_' . $file->getClientOriginalName();
+                    $file_path = $file->storeAs('public/modul', $file_name);
+                    Modul::create([
+                        'nama' => $file_name,
+                        'file_path' => $file_path,
+                        'sekolah_course_id' => $sekolahCourse->id
+                    ]);
+                }
+            }
+
+            Alert::success('Success', 'Course berhasil diupdate');
+            return redirect()->route('guru.course.index');
+        } catch (\Throwable $th) {
+            Alert::error('Error', $th->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 }

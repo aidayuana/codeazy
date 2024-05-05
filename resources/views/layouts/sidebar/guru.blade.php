@@ -24,7 +24,7 @@
     <li class="{{ request()->routeIs(['admin.kelas*', 'guru.course*']) ? 'active' : '' }}">
       <a href="#" class="main-menu has-dropdown">
         <i class="fa-solid fa-school"></i>
-        <span>Course & Modul</span>
+        <span>Kelas & Course</span>
       </a>
       <ul class="sub-menu">
         <li>
