@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Modul;
+use App\Models\PenilaianModulSiswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -124,6 +126,17 @@ class ModulController extends Controller
     public function downloadModul($id)
     {
         $modul = Modul::find($id);
+        if (!$modul) {
+            Alert::error('Error', 'Modul tidak ditemukan');
+            return redirect()->back();
+        }
+        if (!PenilaianModulSiswa::where('modul_id', $modul->id)->where('siswa_id', Auth::user()->siswa->id)->exists()) {
+            PenilaianModulSiswa::create([
+                'modul_id' => $modul->id,
+                'siswa_id' => Auth::user()->siswa->id,
+                'is_download_modul' => 1
+            ]);
+        }
         return response()->download(storage_path('app/' . $modul->file_path));
     }
 }

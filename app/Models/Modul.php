@@ -21,4 +21,9 @@ class Modul extends Model
     {
         return $this->belongsTo(SekolahCourse::class, 'sekolah_course_id', 'id');
     }
+
+    public function penilaianModulSiswa()
+    {
+        return $this->hasMany(PenilaianModulSiswa::class);
+    }
 }
