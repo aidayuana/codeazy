@@ -92,8 +92,9 @@ class ModulController extends Controller
                 if ($modul->file_path) {
                     Storage::delete($modul->file_path);
                 }
+                $index = $modul->pertemuan;
                 $file = $request->file('file');
-                $file_name = date('d-m-Y') . '_' . $file->getClientOriginalName();
+                $file_name = "Pertemuan-$index" . '_' . $file->getClientOriginalName();
                 $file_path = $file->storeAs('public/modul', $file_name);
                 $modul->file_path = $file_path;
                 $modul->nama = $file_name;

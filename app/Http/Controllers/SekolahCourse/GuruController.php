@@ -102,12 +102,13 @@ class GuruController extends Controller
                 'pertemuan' => $request->pertemuan
             ]);
 
-            for ($i = 0; $i < $request->pertemuan; $i++) {
+            $arrayKeys = array_keys($request->file);
+            foreach ($arrayKeys as $key) {
                 for ($j = 0; $j < 3; $j++) {
-                    if ($request->hasFile("file.$i.$j")) {
-                        $index = $i + 1;
-                        $file = $request->file("file.$i.$j");
-                        $file_name = date('d-m-Y') . '_' . "Pertemuan-$index" . '_' . $file->getClientOriginalName();
+                    if ($request->hasFile("file.$key.$j")) {
+                        $index = $key + 1;
+                        $file = $request->file("file.$key.$j");
+                        $file_name = "Pertemuan-$index" . '_' . $file->getClientOriginalName();
                         $file_path = $file->storeAs('public/modul', $file_name);
                         Modul::create([
                             'nama' => $file_name,
