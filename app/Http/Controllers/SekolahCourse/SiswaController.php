@@ -54,7 +54,6 @@ class SiswaController extends Controller
             }
 
             $penilaianModulSiswa = PenilaianModulSiswa::where('siswa_id', Auth::user()->siswa->id);
-            $nilaiDownload = $penilaianModulSiswa->pluck('is_download_modul')->toArray();
             $nilaiUpload = $penilaianModulSiswa->pluck('is_upload_tugas')->toArray();
             $labels = $sekolahCourse->modul->pluck('nama')->toArray();
 
@@ -62,9 +61,6 @@ class SiswaController extends Controller
             foreach ($labels as $label) {
                 $total = 0;
                 $index = array_search($label, $labels);
-                if (isset($nilaiDownload[$index])) {
-                    $total += $nilaiDownload[$index];
-                }
                 if (isset($nilaiUpload[$index])) {
                     $total += $nilaiUpload[$index];
                 }

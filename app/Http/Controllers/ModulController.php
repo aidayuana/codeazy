@@ -130,13 +130,12 @@ class ModulController extends Controller
             Alert::error('Error', 'Modul tidak ditemukan');
             return redirect()->back();
         }
-        if (!PenilaianModulSiswa::where('modul_id', $modul->id)->where('siswa_id', Auth::user()->siswa->id)->exists()) {
-            PenilaianModulSiswa::create([
-                'modul_id' => $modul->id,
-                'siswa_id' => Auth::user()->siswa->id,
-                'is_download_modul' => 1
-            ]);
-        }
+        // if (!PenilaianModulSiswa::where('modul_id', $modul->id)->where('siswa_id', Auth::user()->siswa->id)->exists()) {
+        //     PenilaianModulSiswa::create([
+        //         'modul_id' => $modul->id,
+        //         'siswa_id' => Auth::user()->siswa->id,
+        //     ]);
+        // }
         return response()->download(storage_path('app/' . $modul->file_path));
     }
 }

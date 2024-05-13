@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('modul_id')->constrained('modul');
             $table->foreignId('siswa_id')->constrained('siswa');
-            $table->boolean('is_download_modul')->default(false);
             $table->boolean('is_upload_tugas')->default(false);
             $table->timestamps();
         });

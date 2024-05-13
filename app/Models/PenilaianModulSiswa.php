@@ -14,7 +14,6 @@ class PenilaianModulSiswa extends Model
     protected $fillable = [
         'modul_id',
         'siswa_id',
-        'is_download_modul',
         'is_upload_tugas',
     ];
 
