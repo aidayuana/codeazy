@@ -18,7 +18,7 @@ class Role
     {
         if (!in_array($request->user()->role, $roles)) {
             Alert::error('Error', 'Anda tidak punya akses ke halaman ini!');
-            return redirect('/');
+            return redirect()->back();
         }
         return $next($request);
     }
