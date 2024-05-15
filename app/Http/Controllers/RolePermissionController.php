@@ -31,8 +31,9 @@ class RolePermissionController extends Controller
     public function update(Request $request, $role)
     {
         $role = Role::find($role);
-        $role->syncPermissions($request->permissions);
+        $permissions = Permission::whereIn('id', $request->permissions)->pluck('name');
+        $role->syncPermissions($permissions);
         Alert::success('Success', 'Role permissions updated');
-        return redirect()->route('role-permissions.index');
+        return redirect()->route('permission.index');
     }
 }
