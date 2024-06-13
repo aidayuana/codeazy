@@ -1,22 +1,30 @@
 @extends('layouts.master')
 
 @section('main')
-<div class="title">Python Editor</div>
 <div class="content-wrapper">
   <div class="row">
     <div class="container">
-      <div>
-          <div id="editor" style="height: 300px; width: 100%;">{{ $data->kode_program }}</div>
-      </div>
-      <div style="display: none">
-          <h4>Unit Tests</h4>
-          <div id="unitTestsEditor" style="height: 300px; width: 100%;">{{ $data->kunci_jawaban }}</div>
-      </div>
-      <button id="run-button" class="btn btn-primary mt-3" onclick="runCode()">Run Code</button>
-      <div class="mt-2">
-          <h4>Output</h4>
-          <pre id="output"></pre>
-          <p id="attempts-info"></p> <!-- Element to display the attempts counter -->
+      <div class="row">
+        <!-- Embed file section -->
+        <div class="col-md-4">
+          <embed src="{{ asset('storage/modul/' . $data->nama) }}" type="application/pdf" width="100%" height="700px">
+        </div>
+        <!-- Editor section -->
+        <div class="col-md-8">
+          <div>
+            <div id="editor" style="height: 500px; width: 100%;">{{ $data->kode_program }}</div>
+          </div>
+          <div style="display: none">
+            <h4>Unit Tests</h4>
+            <div id="unitTestsEditor" style="height: 300px; width: 100%;">{{ $data->kunci_jawaban }}</div>
+          </div>
+          <button id="run-button" class="btn btn-primary mt-3">Run Code</button>
+          <div class="mt-2">
+            <h4>Output</h4>
+            <pre id="output"></pre>
+            <pre id="attempts-info"></pre> <!-- Element to display the attempts counter -->
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -36,12 +44,13 @@ document.addEventListener("DOMContentLoaded", function() {
   unitTestsEditor.session.setMode("ace/mode/python");
 
   const modulId = {{ $data->id }}; // Ensure this is correctly passing the modul ID
+  const userId = {{ Auth::user()->id }}; // Get the user ID
 
   document.getElementById("run-button").addEventListener("click", function() {
-    runCode(modulId);
+    runCode(modulId, userId);
   });
 
-  async function runCode(modulId) {
+  async function runCode(modulId, userId) {
     const code = editor.getValue();
     const unitTests = unitTestsEditor.getValue();
 
@@ -51,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ code, unitTests, modulId }), // Include modulId here
+        body: JSON.stringify({ code, unitTests, modulId, userId }), // Include userId here
       });
 
       const result = await response.json();
@@ -60,50 +69,26 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("output").textContent =
           // "CODE STDOUT:\n" +
           // (result.code_stdout || "No output") +
-          // "\nCODE STDERR:\n" +
-          // (result.code_stderr || "No errors") +
+          "\nCODE STDERR:\n" +
+          (result.code_stderr || "No errors") +
           "\n\nUNIT TEST STDOUT:\n" +
-          (result.test_stdout || "No output") +
-          "\nUNIT TEST STDERR:\n" +
-          (result.test_stderr || "No errors") +
-          "\nATTEMPTS:" +
-          result.attempts +
-          "\nATTEMPTS TO SUCCESS:" +
-          result.attempts_to_success;
+          (result.test_stdout || "No output");
+          // "\nUNIT TEST STDERR:\n" +
+          // (result.test_stderr || "No errors");
+
+        document.getElementById("attempts-info").textContent =
+          "\nCompile Attempts Code: " + result.attempts +
+          "\nCode Pass Attempts: " + result.attempts_to_success +
+          "\nFailed Code Attempts: " + result.failed_attempts;
       } else {
         document.getElementById("output").textContent =
           "Error: " + result.error;
       }
     } catch (error) {
       document.getElementById("output").textContent =
-        "Fetch Error: " + error.message;
+        "Request failed: " + error;
     }
   }
 });
-
-
-
-async function resetAttempts(modulId) {
-  try {
-    const response = await fetch("http://localhost:5000/reset-attempts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ modulId }),
-    });
-
-    const result = await response.json();
-
-    if (response.ok) {
-      alert(result.message || "Attempts counter reset successfully!");
-    } else {
-      alert("Error: " + (result.message || "An error occurred"));
-    }
-  } catch (error) {
-    alert("Fetch Error: " + error.message);
-  }
-}
-
 </script>
 @endsection

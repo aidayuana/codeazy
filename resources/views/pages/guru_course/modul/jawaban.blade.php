@@ -5,18 +5,25 @@
 <div class="content-wrapper">
   <div class="row">
     <div class="container">
-      <div>
-          <div id="editor" style="height: 300px; width: 100%;">{{ $data->kode_program }}</div>
-      </div>
-      <div class="mt-2">
-          <h4>Unit Tests</h4>
-          <div id="unitTestsEditor" style="height: 300px; width: 100%;">{{ $data->kunci_jawaban }}</div>
-      </div>
-      <button id="run-button" class="btn btn-primary mt-3">Run Code</button>
-      <button id="save-button" class="btn btn-success mt-3">Simpan Kunci Jawaban</button>
-      <div class="mt-2">
-          <h4>Output</h4>
-          <pre id="output"></pre>
+      <div class="row">
+        <div class="col-md-4">
+          <embed src="{{ asset('storage/modul/' . $data->nama) }}" type="application/pdf" width="100%" height="700px">
+        </div>
+        <div class="col-md-8">
+          <div>
+              <div id="editor" style="height: 300px; width: 100%;">{{ $data->kode_program }}</div>
+          </div>
+          <div class="mt-2">
+              <h4>Unit Tests</h4>
+              <div id="unitTestsEditor" style="height: 300px; width: 100%;">{{ $data->kunci_jawaban }}</div>
+          </div>
+          <button id="run-button" class="btn btn-primary mt-3">Run Code</button>
+          <button id="save-button" class="btn btn-success mt-3">Simpan Kunci Jawaban</button>
+          <div class="mt-2">
+              <h4>Output</h4>
+              <pre id="output"></pre>
+          </div>
+        </div>
       </div>
     </div>
   </div>
