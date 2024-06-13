@@ -3,7 +3,10 @@
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\ModulController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PythonController;
+use App\Http\Controllers\SekolahCourse\GuruController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\ManualBookController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,6 +58,11 @@ Route::middleware(['auth', 'role:admin,guru'])->group(function () {
     Route::patch('/modul/{modul}', [ModulController::class, 'update'])->name('modul.update');
     Route::delete('/modul/{modul}', [ModulController::class, 'destroy'])->name('modul.destroy');
 });
+
+Route::get('/python-course-siswa/{id}', [PythonController::class, 'index']);
+Route::get('/python-course/{id}', [GuruController::class, 'editKunciJawaban']);
+
+Route::get('/download-manual-book', [ManualBookController::class, 'download'])->name('manual.book.download');
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/super-admin.php';

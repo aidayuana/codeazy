@@ -50,12 +50,18 @@
         <span>Permission</span>
       </a>
     </li>
+    <li class="{{ request()->routeIs('manual.book.download') ? 'active' : '' }}">
+      <a href="{{ route('manual.book.download') }}" class="link">
+        <i class="ti-book"></i>
+        <span>Manual Book</span>
+      </a>
+    </li>
   </ul>
   <ul>
     <li class="mt-auto">
-      <a href="" class="link">
+      <a href="#" class="link">
         <i class="ti-link"></i>
-        <span>Link ke:</span>
+        <span>FEEDBACK</span>
       </a>
     </li>
   </ul>

@@ -26,7 +26,7 @@
     <li class="mt-auto">
       <a href="" class="link">
         <i class="ti-link"></i>
-        <span>Link ke:</span>
+        <span>FEEDBACK</span>
       </a>
     </li>
   </ul>

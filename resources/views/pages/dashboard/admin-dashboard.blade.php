@@ -31,6 +31,10 @@
                 {{ $dataUser->sekolah->nama }}
               </span>
             </div>
+            <div class="d-flex gap-3">
+              <h6 class="my-auto">Manual Book</h6>
+              <a href="{{ route('manual.book.download') }}" class="btn btn-link my-auto">Unduh</a>
+            </div>
           </div>
         </div>
       </div>

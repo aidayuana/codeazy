@@ -22,4 +22,5 @@ Route::middleware(['auth', 'role:guru'])->group(function () {
     Route::get('/guru/course/{sekolahCourse}', [GuruController::class, 'show'])->name('guru.course.show');
     Route::get('/guru/course/{sekolahCourse}/edit', [GuruController::class, 'edit'])->name('guru.course.edit');
     Route::patch('/guru/course/{sekolahCourse}', [GuruController::class, 'update'])->name('guru.course.update');
+    Route::put('/python-jawaban/{id}', [GuruController::class, 'updateKunciJawaban']);
 });
