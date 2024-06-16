@@ -68,6 +68,7 @@ Route::get('/python-course/{id}', [GuruController::class, 'editKunciJawaban']);
 Route::middleware(['auth', 'role:super_admin'])->group(function () {
     Route::get('/manualbook/create', [ManualBookController::class, 'create'])->name('manualbook.create');
     Route::get('/manualbook', [ManualBookController::class, 'index'])->name('manualbook.index');
+    Route::post('/manualbook/store', [ManualBookController::class, 'store'])->name('manualbook.store');
     Route::get('/manualbook/download/{id}', [ManualBookController::class, 'download'])->name('manualbook.download');
     Route::get('/manualbook/{manualBook}/edit', [ManualBookController::class, 'edit'])->name('manualbook.edit');
     Route::patch('/manualbook/{manualBook}', [ManualBookController::class, 'update'])->name('manualbook.update');

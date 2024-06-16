@@ -42,31 +42,22 @@ class ManualBookController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $validator = Validator::make($request->all(), [
-                'file' => 'required|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:8192'
-            ]);
+        $request->validate([
+            'file' => 'required|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:8192',
+        ]);
 
-            if ($validator->fails()) {
-                Alert::error('Error', $validator->errors()->first());
-                return redirect()->back()->withInput();
-            }
+        $file = $request->file('file');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $filePath = $file->storeAs('public/manual_books', $fileName);
 
-            $file = $request->file('file');
-            $file_name = date('d-m-Y') . '_' . $file->getClientOriginalName();
-            $file_path = $file->storeAs('public/manualbook', $file_name);
+        ManualBook::create([
+            'nama' => $fileName,
+            'file_path' => $filePath,
+            'role_id' => $request->role_id,
+        ]);
 
-            ManualBook::create([
-                'nama' => $file_name,
-                'file_path' => $file_path,
-            ]);
-
-            Alert::success('Success', 'Manual Book berhasil diupload');
-            return redirect()->route('manualbook.index');
-        } catch (\Exception $e) {
-            Alert::error('Error', $e->getMessage());
-            return redirect()->back()->withInput();
-        }
+        Alert::success('Success', 'Manual book uploaded successfully');
+        return redirect()->route('manualbook.index');
     }
 
     /**
@@ -117,30 +108,24 @@ class ManualBookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ManualBook $manualBook)
+    public function destroy($id)
     {
-        try {
-            if ($manualBook->file_path) {
-                Storage::delete($manualBook->file_path);
-            }
+        $manualBook = ManualBook::findOrFail($id);
+        Storage::delete($manualBook->file_path);
+        $manualBook->delete();
 
-            $manualBook->delete();
-            Alert::success('Success', 'Manual Book berhasil dihapus');
-            return redirect()->route('manualbook.index');
-        } catch (\Exception $e) {
-            Alert::error('Error', $e->getMessage());
-            return redirect()->back();
-        }
+        return redirect()->back()->with('success', 'Manual Book deleted successfully.');
     }
 
-    public function download($id)
+    public function download()
     {
-        $manualBook = ManualBook::find($id);
-        if (!$manualBook) {
-            Alert::error('Error', 'Manual Book tidak ditemukan');
-            return redirect()->back();
+        $user = Auth::user();
+        $manualBook = ManualBook::where('role_id', $user->role_id)->first();
+
+        if ($manualBook) {
+            return Storage::download($manualBook->file_path, $manualBook->nama);
         }
 
-        return response()->download(storage_path('app/' . $manualBook->file_path));
+        return redirect()->back()->with('error', 'Manual Book not found.');
     }
 }

@@ -24,6 +24,7 @@
             <div id="unitTestsEditor" style="height: 200px; width: 100%;">{{ $data->kunci_jawaban }}</div>
           </div>
           <button id="run-button" class="btn btn-primary mt-3">Run Code</button>
+          <button id="save-button" class="btn btn-success mt-3">Simpan Hasil Pengerjaan</button>
           <div class="mt-2">
             <h4>Output</h4>
             <pre id="output"></pre>
