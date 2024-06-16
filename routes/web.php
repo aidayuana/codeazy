@@ -32,6 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/manualbook', [ManualBookController::class, 'index'])->name('manualbook.index');
+    Route::get('/manualbook/download/{id}', [ManualBookController::class, 'download'])->name('manualbook.download');
 });
 
 Route::middleware(['auth', 'role:super_admin,admin,guru'])->group(function () {
@@ -62,7 +65,14 @@ Route::middleware(['auth', 'role:admin,guru'])->group(function () {
 Route::get('/python-course-siswa/{id}', [PythonController::class, 'index']);
 Route::get('/python-course/{id}', [GuruController::class, 'editKunciJawaban']);
 
-Route::get('/download-manual-book', [ManualBookController::class, 'download'])->name('manual.book.download');
+Route::middleware(['auth', 'role:super_admin'])->group(function () {
+    Route::get('/manualbook/create', [ManualBookController::class, 'create'])->name('manualbook.create');
+    Route::get('/manualbook', [ManualBookController::class, 'index'])->name('manualbook.index');
+    Route::get('/manualbook/download/{id}', [ManualBookController::class, 'download'])->name('manualbook.download');
+    Route::get('/manualbook/{manualBook}/edit', [ManualBookController::class, 'edit'])->name('manualbook.edit');
+    Route::patch('/manualbook/{manualBook}', [ManualBookController::class, 'update'])->name('manualbook.update');
+    Route::delete('/manualbook/{manualBook}', [ManualBookController::class, 'destroy'])->name('manualbook.destroy');
+});
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/super-admin.php';

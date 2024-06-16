@@ -4,6 +4,7 @@ import subprocess
 import os
 import tempfile
 import threading
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -16,8 +17,18 @@ attempts_to_success = {}
 failed_attempts = {}
 # Dictionary to store whether the last attempt was successful or not
 last_attempt_successful = {}
+# Dictionary to store the time taken for successful attempts for each user and module ID
+time_taken_dict = {}
+
 # Lock for thread-safe dictionary operations
 lock = threading.Lock()
+
+def format_time(seconds):
+    minutes, seconds = divmod(seconds, 60)
+    if minutes > 0:
+        return f"{int(minutes)} menit {int(seconds)} detik"
+    else:
+        return f"{int(seconds)} detik"
 
 @app.route('/run', methods=['POST'])
 def run_code():
@@ -26,6 +37,7 @@ def run_code():
     unit_tests = data.get('unitTests')
     modul_id = data.get('modulId')
     user_id = data.get('userId')
+    time_taken = data.get('timeTaken')
 
     if code is None or unit_tests is None or modul_id is None or user_id is None:
         return jsonify({'error': 'No code, unit tests, module ID, or user ID provided'}), 400
@@ -34,7 +46,7 @@ def run_code():
     key = f"{user_id}_{modul_id}"
 
     with lock:
-        # Initialize the attempts, attempts_to_success, failed_attempts, and last_attempt_successful if not present
+        # Initialize the attempts, attempts_to_success, failed_attempts, last_attempt_successful if not present
         if key not in attempts_counter:
             attempts_counter[key] = 0
         if key not in attempts_to_success:
@@ -43,10 +55,11 @@ def run_code():
             failed_attempts[key] = 0
         if key not in last_attempt_successful:
             last_attempt_successful[key] = False
+        if key not in time_taken_dict:
+            time_taken_dict[key] = None
 
         # Increment the attempts counter for this user-module combination
         attempts_counter[key] += 1
-        # Get the current attempts count for this user-module combination
         attempts = attempts_counter[key]
 
     # Create a temporary directory to store code and tests
@@ -68,9 +81,10 @@ def run_code():
                 'code_stderr': result_code.stderr,
                 'test_stdout': '',
                 'test_stderr': '',
-                'attempts': attempts,  # Send attempts count in the response
-                'attempts_to_success': attempts_to_success.get(key, 0),  # Send attempts to success count in the response
-                'failed_attempts': failed_attempts.get(key, 0),  # Send failed attempts count in the response
+                'attempts': attempts,
+                'attempts_to_success': attempts_to_success.get(key, 0),
+                'failed_attempts': failed_attempts.get(key, 0),
+                'time_taken': format_time(time_taken_dict.get(key)) if time_taken_dict.get(key) is not None else None
             })
 
         # Combine code and tests into one file
@@ -86,28 +100,52 @@ def run_code():
         with lock:
             if result_tests.returncode == 0:
                 # Only update attempts_to_success if the test was successful on the first attempt or after a failure
-                if not last_attempt_successful[key]:
+                if attempts == 1 or not last_attempt_successful.get(key, False):
                     attempts_to_success[key] = attempts
-                last_attempt_successful[key] = True  # Update the last_attempt_successful status
-                # Do not reset attempts counter if successful
-            else:
-                failed_attempts[key] += 1  # Increase failed attempts if the test failed
-                last_attempt_successful[key] = False  # Update the last_attempt_successful status
+                last_attempt_successful[key] = True
 
+                # Store the time taken for successful attempt only if it is not already stored
+                if time_taken_dict[key] is None and time_taken is not None:
+                    time_taken_dict[key] = time_taken
+
+            else:
+                failed_attempts[key] += 1
+                last_attempt_successful[key] = False
+
+            # Retrieve the correct attempts_to_success count
             attempts_to_success_count = attempts_to_success[key]
             failed_attempts_count = failed_attempts[key]
+            stored_time_taken = time_taken_dict.get(key)
 
         return jsonify({
             'code_stdout': result_code.stdout,
             'code_stderr': result_code.stderr,
             'test_stdout': result_tests.stdout,
             'test_stderr': result_tests.stderr,
-            'attempts': attempts,  # Send attempts count in the response
-            'attempts_to_success': attempts_to_success_count,  # Send attempts to success count in the response
-            'failed_attempts': failed_attempts_count,  # Send failed attempts count in the response
+            'attempts': attempts,
+            'attempts_to_success': attempts_to_success_count,
+            'failed_attempts': failed_attempts_count,
+            'time_taken': format_time(stored_time_taken) if stored_time_taken is not None else format_time(time_taken) if time_taken is not None else None,
+            'code_passed': result_tests.returncode == 0
         })
 
+@app.route('/get-time-taken', methods=['GET'])
+def get_time_taken():
+    modul_id = request.args.get('modulId')
+    user_id = request.args.get('userId')
 
+    if modul_id is None or user_id is None:
+        return jsonify({'error': 'No module ID or user ID provided'}), 400
+
+    # Create a unique key for the user-module combination
+    key = f"{user_id}_{modul_id}"
+
+    with lock:
+        stored_time_taken = time_taken_dict.get(key)
+
+    return jsonify({
+        'time_taken': format_time(stored_time_taken) if stored_time_taken is not None else None
+    })
 
 
 @app.route('/run-guru', methods=['POST']) 
@@ -144,7 +182,6 @@ def run_guru():
             'test_stderr': result.stderr,
         })
 
-
 @app.route('/reset-attempts', methods=['POST'])
 def reset_attempts():
     data = request.json
@@ -160,9 +197,9 @@ def reset_attempts():
         attempts_to_success[key] = 0  # Optionally reset the attempts to success counter as well
         failed_attempts[key] = 0  # Reset failed attempts counter as well
         last_attempt_successful[key] = False  # Reset last_attempt_successful status
+        time_taken_dict[key] = None  # Reset time taken
 
     return jsonify({'status': 'success', 'message': 'Attempts counter reset to 0'})
-
 
 if __name__ == '__main__':
     app.run(debug=True)

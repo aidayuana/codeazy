@@ -18,6 +18,12 @@
   <link rel="stylesheet" href="{{ asset('vendor/perfect-scrollbar/css/perfect-scrollbar.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/css/style.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-override.min.css') }}" />
+  <style>
+    .profile-icon {
+      color: #007bff; /* Warna biru */
+      margin-right: 8px; /* Memberikan sedikit ruang antara ikon dan keterangan */
+    }
+  </style>
 </head>
 
 <body>
@@ -31,7 +37,7 @@
           <div class="sidebar-toggle action-toggle"><i class="fas fa-bars"></i></div>
         </div>
         <div class="header-content">
-          <div class="notification dropdown me-2">
+          {{-- <div class="notification dropdown me-2">
             <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="far fa-bell"></i>
               <span class="badge">12</span>
@@ -70,20 +76,20 @@
                 </a>
               </li>
             </ul>
-          </div>
+          </div> --}}
           <div class="dropdown dropdown-menu-end">
             <a href="#" class="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <div class="label">
                 <span></span>
                 <div>
                   @if (Auth::user()->role == 'super_admin')
-                    Super Admin
+                    <i class="fas fa-user profile-icon"></i> Super Admin
                   @elseif(Auth::user()->role == 'admin')
-                    Admin
+                    <i class="fas fa-user profile-icon"></i> Admin
                   @elseif(Auth::user()->role == 'guru')
-                    Guru
+                    <i class="fas fa-user profile-icon"></i> Guru
                   @else
-                    Siswa
+                    <i class="fas fa-user profile-icon"></i> Siswa
                   @endif
                 </div>
               </div>

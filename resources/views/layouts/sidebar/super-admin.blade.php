@@ -50,8 +50,8 @@
         <span>Permission</span>
       </a>
     </li>
-    <li class="{{ request()->routeIs('manual.book.download') ? 'active' : '' }}">
-      <a href="{{ route('manual.book.download') }}" class="link">
+    <li class="{{ request()->routeIs('manualbook.index') ? 'active' : '' }}">
+      <a href="{{ route('manualbook.index') }}" class="link">
         <i class="ti-book"></i>
         <span>Manual Book</span>
       </a>
