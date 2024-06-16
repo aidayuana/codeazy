@@ -24,10 +24,8 @@ class ManualBookController extends Controller
     public function index()
     {
         $roles = Role::all();
-        $manualBooks = ManualBook::all();
-        return view('pages.manualbook.index', compact('roles', 'manualBooks'));
+        return view('pages.manualbook.index', compact('roles'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -117,10 +115,9 @@ class ManualBookController extends Controller
         return redirect()->back()->with('success', 'Manual Book deleted successfully.');
     }
 
-    public function download()
+    public function download($id)
     {
-        $user = Auth::user();
-        $manualBook = ManualBook::where('role_id', $user->role_id)->first();
+        $manualBook = ManualBook::findOrFail($id);
 
         if ($manualBook) {
             return Storage::download($manualBook->file_path, $manualBook->nama);
