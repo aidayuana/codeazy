@@ -24,8 +24,11 @@ class ManualBookController extends Controller
     public function index()
     {
         $roles = Role::all();
-        return view('pages.manualbook.index', compact('roles'));
+        $manualBooks = ManualBook::all(); // Menambahkan pengambilan data ManualBook
+        
+        return view('pages.manualbook.index', compact('roles', 'manualBooks'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -46,7 +49,7 @@ class ManualBookController extends Controller
 
         $file = $request->file('file');
         $fileName = time() . '_' . $file->getClientOriginalName();
-        $filePath = $file->storeAs('public/manual_books', $fileName);
+        $filePath = $file->storeAs('/manual_books', $fileName);
 
         ManualBook::create([
             'nama' => $fileName,
@@ -117,10 +120,14 @@ class ManualBookController extends Controller
 
     public function download($id)
     {
-        $manualBook = ManualBook::findOrFail($id);
-
-        if ($manualBook) {
-            return Storage::download($manualBook->file_path, $manualBook->nama);
+        
+        // $manualBooks = ManualBook::find($id);
+        $manualBooks = ManualBook::where('id', $id)->first();
+        if ($manualBooks) {
+            // return Storage::download('storage/'. $manualBooks->file_path, $manualBooks->nama);
+            //  public_path('storage/' . $manualBooks->file_path);
+            // create download 
+            return response()->download(public_path('storage/' . $manualBooks->file_path), $manualBooks->nama);
         }
 
         return redirect()->back()->with('error', 'Manual Book not found.');

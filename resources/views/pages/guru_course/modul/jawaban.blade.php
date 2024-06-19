@@ -1,7 +1,6 @@
 @extends('layouts.master')
 
 @section('main')
-<div class="title">Kode Program</div>
 <div class="content-wrapper">
   <div class="row">
     <div class="container">
@@ -10,7 +9,8 @@
           <embed src="{{ asset('storage/modul/' . $data->nama) }}" type="application/pdf" width="100%" height="700px">
         </div>
         <div class="col-md-8">
-          <div>
+          <div class="title">Kode Program</div>
+          <div class="code-editor-wrapper">
               <div id="editor" style="height: 300px; width: 100%;">{{ $data->kode_program }}</div>
           </div>
           <div class="mt-2">
@@ -43,27 +43,26 @@ document.addEventListener("DOMContentLoaded", function() {
   unitTestsEditor.session.setMode("ace/mode/python");
 
   document.getElementById("save-button").addEventListener("click", async function() {
-  const unitTests = unitTestsEditor.getValue();
-  const kodeProgram = editor.getValue();
-  const modulId = {{ $data->id }};  // Replace with the actual modul ID
+    const unitTests = unitTestsEditor.getValue();
+    const kodeProgram = editor.getValue();
+    const modulId = {{ $data->id }};  // Replace with the actual modul ID
 
-  $.ajax({
-    url: `/python-jawaban/${modulId}`,
-    type: "PUT",
-    headers: {
-      "X-CSRF-TOKEN": "{{ csrf_token() }}",
-    },
-    contentType: "application/json",
-    data: JSON.stringify({ kunci_jawaban: unitTests, kode_program: kodeProgram }),
-    success: function(response) {
-      alert(response.message || "Kunci jawaban berhasil disimpan!");
-    },
-    error: function(xhr, status, error) {
-      alert("Error: " + (xhr.responseJSON.message || "An error occurred"));
-    }
+    $.ajax({
+      url: `/python-jawaban/${modulId}`,
+      type: "PUT",
+      headers: {
+        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+      },
+      contentType: "application/json",
+      data: JSON.stringify({ kunci_jawaban: unitTests, kode_program: kodeProgram }),
+      success: function(response) {
+        alert(response.message || "Kunci jawaban berhasil disimpan!");
+      },
+      error: function(xhr, status, error) {
+        alert("Error: " + (xhr.responseJSON.message || "An error occurred"));
+      }
+    });
   });
-});
-
 
   document.getElementById("run-button").addEventListener("click", runCode);
 
@@ -84,10 +83,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
       if (response.ok) {
         document.getElementById("output").textContent =
-          // "CODE STDOUT:\n" +
-          // (result.code_stdout || "No output") +
-          // "\nCODE STDERR:\n" +
-          // (result.code_stderr || "No errors") +
           "\nUNIT TEST STDOUT:\n" +
           (result.test_stdout || "No output") +
           "\nUNIT TEST STDERR:\n" +
@@ -103,4 +98,16 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 </script>
+
+<style>
+  .title {
+    font-size: 24px;
+    /* font-weight: bold; */
+    padding: 2px 0;
+  }
+  .code-editor-wrapper {
+    margin-top: 15px;
+  }
+</style>
+
 @endsection

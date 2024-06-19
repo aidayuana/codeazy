@@ -1,7 +1,7 @@
 <div class="btn-group gap-2">
   @if ($row->approved == 0)
     <a href="{{ route('admin.approve', $row->id) }}" class="btn confirm_approve btn-success btn-sm">
-      <i class="ti-check"></i>
+      Approve
     </a>
   @endif
   <a href="{{ route('admin.edit', $row->id) }}" class="btn btn-primary btn-sm">Edit</a>

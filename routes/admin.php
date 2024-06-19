@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuruController;
+use App\Http\Controllers\ManualBookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SekolahCourse\AdminController;
 use Illuminate\Support\Facades\Route;
@@ -36,4 +37,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/admin/course/{sekolahCourse}', [AdminController::class, 'destroy'])->name('admin.course.destroy');
 
     Route::patch('/admin/profile/sekolah', [ProfileController::class, 'updateSekolah'])->name('profile.updateSekolah');
+
+    Route::get('/manualbook/download/{id}', [ManualBookController::class, 'download'])->name('manualbook.download');
 });

@@ -88,5 +88,6 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
         Route::get('/{manualBook}/edit', [ManualBookController::class, 'edit'])->name('manualbook.edit');
         Route::patch('/{manualBook}', [ManualBookController::class, 'update'])->name('manualbook.update');
         Route::delete('/{manualBook}', [ManualBookController::class, 'destroy'])->name('manualbook.destroy');
+        Route::get('/manualbook/download/{id}', [ManualBookController::class, 'download'])->name('manualbook.download');
     });
 });
