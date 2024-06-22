@@ -14,8 +14,8 @@ class ManualBookController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'role:super_admin'])->only(['create', 'store', 'edit', 'update', 'destroy']);
-        $this->middleware('auth')->only(['index', 'download']);
+        // $this->middleware(['auth', 'role:super_admin'])->only(['create', 'store', 'edit', 'update', 'destroy']);
+        // $this->middleware('auth')->only(['index', 'download']);
     }
 
     /**
@@ -120,7 +120,6 @@ class ManualBookController extends Controller
 
     public function download($id)
     {
-        
         // $manualBooks = ManualBook::find($id);
         $manualBooks = ManualBook::where('id', $id)->first();
         if ($manualBooks) {

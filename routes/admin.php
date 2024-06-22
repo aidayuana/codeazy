@@ -37,6 +37,4 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/admin/course/{sekolahCourse}', [AdminController::class, 'destroy'])->name('admin.course.destroy');
 
     Route::patch('/admin/profile/sekolah', [ProfileController::class, 'updateSekolah'])->name('profile.updateSekolah');
-
-    Route::get('/manualbook/download/{id}', [ManualBookController::class, 'download'])->name('manualbook.download');
 });

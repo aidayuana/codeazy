@@ -46,7 +46,7 @@ Route::middleware(['auth', 'role:super_admin,admin,guru'])->group(function () {
         Route::get('/{siswa}/edit', [SiswaController::class, 'edit'])->name('siswa.edit');
         Route::patch('/{siswa}', [SiswaController::class, 'update'])->name('siswa.update');
         Route::delete('/{siswa}', [SiswaController::class, 'destroy'])->name('siswa.destroy');
-        Route::get('/manualbook/download/{id}', [ManualBookController::class, 'download'])->name('manualbook.download');
+        
     });
 });
 
@@ -62,7 +62,7 @@ Route::middleware(['auth', 'role:admin,guru'])->group(function () {
     Route::patch('/modul/{modul}', [ModulController::class, 'update'])->name('modul.update');
     Route::delete('/modul/{modul}', [ModulController::class, 'destroy'])->name('modul.destroy');
 
-    Route::get('/manualbook/download/{id}', [ManualBookController::class, 'download'])->name('manualbook.download');
+    
 });
 
 Route::get('/python-course-siswa/{id}', [PythonController::class, 'index']);
@@ -72,7 +72,7 @@ Route::middleware(['auth', 'role:super_admin'])->group(function () {
     Route::get('/manualbook/create', [ManualBookController::class, 'create'])->name('manualbook.create');
     Route::get('/manualbook', [ManualBookController::class, 'index'])->name('manualbook.index');
     Route::post('/manualbook/store', [ManualBookController::class, 'store'])->name('manualbook.store');
-    Route::get('/manualbook/download/{id}', [ManualBookController::class, 'download'])->name('manualbook.download');
+    
     Route::get('/manualbook/{manualBook}/edit', [ManualBookController::class, 'edit'])->name('manualbook.edit');
     Route::patch('/manualbook/{manualBook}', [ManualBookController::class, 'update'])->name('manualbook.update');
     Route::delete('/manualbook/{manualBook}', [ManualBookController::class, 'destroy'])->name('manualbook.destroy');

@@ -22,5 +22,5 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
 
     Route::get('/siswa/course', [SiswaController::class, 'index'])->name('siswa.course.index');
     Route::get('/siswa/course/{sekolahCourse}', [SiswaController::class, 'show'])->name('siswa.course.show');
-    Route::get('/manualbook/download/{id}', [ManualBookController::class, 'download'])->name('manualbook.download');
+
 });
