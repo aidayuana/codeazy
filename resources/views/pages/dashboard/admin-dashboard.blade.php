@@ -33,11 +33,12 @@
             </div>
             <div class="d-flex gap-3">
               <h6 class="my-auto">Manual Book</h6>
-              @if ($manualBook = \App\Models\ManualBook::where('role_id', $user->role_id)->first())
-                <a href="{{ route('manualbook.download', $manualBook->id) }}" class="btn btn-link my-auto">Unduh</a>
-              @else
-                <span class="my-auto">Tidak ada manual book tersedia</span>
-              @endif
+              @foreach ($manualBooks as $item)
+                <a href="{{ route('manualbook.download', $item->id) }}" class="btn btn-link my-auto">Unduh</a>
+            @endforeach
+            @if ($manualBooks->isEmpty())
+              <span class="my-auto">Tidak ada manual book tersedia</span>
+            @endif
             </div>
           </div>
         </div>
